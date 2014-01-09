@@ -24,21 +24,21 @@ public class GroupDetailsFragment extends Fragment {
     private Spinner ruleReason;
     private EditText groupName;
     private EditText groupDescription;
-    public static ImageView groupLogo;
-    private Button addRule;
-    private Button saveGroup;
-    private Button saveGroup2;
-    private Button joinGroup;
-    private Button leaveGroup;
-    private Button editGroup;
-    private Button editGroup2;
-    private Button editRule;
+    private static Button addRule;
+    private static Button saveGroup;
+    private static Button saveGroup2;
+    private static Button joinGroup;
+    private static Button leaveGroup;
+    private static Button editGroup;
+    private static Button editGroup2;
+    private static Button editRule;
 
     private static LinearLayout rulesLayout;
     private LinearLayout.LayoutParams rulesLayoutParams;
     private TextView ruleView;
     private TextView rulesMessage;
     private static int ruleIndex = 0;
+    public static ImageView groupLogo;
     public static int RESULT_LOAD_IMAGE = 1;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
@@ -302,63 +302,37 @@ public class GroupDetailsFragment extends Fragment {
                                 ruleName.setText(r.getName());
                                 ruleReason.setSelection(r.getReason());
 
-                                if (MainActivity.groupState == 0) {
-                                    editRule.setVisibility(View.VISIBLE);
-                                    editGroup2.setVisibility(View.GONE);
-                                    addRule.setVisibility(View.GONE);
-                                    editGroup.setVisibility(View.GONE);
-                                    saveGroup.setVisibility(View.GONE);
-                                    saveGroup2.setVisibility(View.VISIBLE);
-                                } else {
-                                    editRule.setVisibility(View.VISIBLE);
-                                    editGroup2.setVisibility(View.VISIBLE);
-                                    addRule.setVisibility(View.GONE);
-                                    editGroup.setVisibility(View.GONE);
-                                    saveGroup.setVisibility(View.GONE);
-                                    saveGroup2.setVisibility(View.GONE);
-                                }
+                                displayButtons(1);
 
                                 editRule.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        int ruleTypeIndex = ruleType.getSelectedItemPosition();
-                                        String ruleNameString = ruleName.getText().toString();
-                                        int ruleReasonIndex = ruleReason.getSelectedItemPosition();
+                                        if (MainActivity.currentGroup.getRules().size() > 0) {
+                                            int ruleTypeIndex = ruleType.getSelectedItemPosition();
+                                            String ruleNameString = ruleName.getText().toString();
+                                            int ruleReasonIndex = ruleReason.getSelectedItemPosition();
 
-                                        Rule modifiedRule = MainActivity.currentGroup.getRules().get(ruleIndex);
-                                        modifiedRule.setName(ruleNameString);
-                                        modifiedRule.setType(ruleTypeIndex);
-                                        modifiedRule.setReason(ruleReasonIndex);
+                                            Rule modifiedRule = MainActivity.currentGroup.getRules().get(ruleIndex);
+                                            modifiedRule.setName(ruleNameString);
+                                            modifiedRule.setType(ruleTypeIndex);
+                                            modifiedRule.setReason(ruleReasonIndex);
 
 
-                                        TextView rule = (TextView) rulesLayout.getChildAt(ruleIndex);
-                                        rule.setText(ruleNameString);
-                                        if (ruleTypeIndex == 0) {
-                                            rule.setBackgroundResource(R.drawable.company_rule_header);
-                                        } else if (ruleTypeIndex == 1) {
-                                            rule.setBackgroundResource(R.drawable.product_rule_header);
-                                        } else {
-                                            rule.setBackgroundResource(R.drawable.ingredient_rule_header);
-                                        }
+                                            TextView rule = (TextView) rulesLayout.getChildAt(ruleIndex);
+                                            rule.setText(ruleNameString);
+                                            if (ruleTypeIndex == 0) {
+                                                rule.setBackgroundResource(R.drawable.company_rule_header);
+                                            } else if (ruleTypeIndex == 1) {
+                                                rule.setBackgroundResource(R.drawable.product_rule_header);
+                                            } else {
+                                                rule.setBackgroundResource(R.drawable.ingredient_rule_header);
+                                            }
 
-                                        ruleType.setSelection(0);
-                                        ruleName.setText("");
-                                        ruleReason.setSelection(0);
+                                            ruleType.setSelection(0);
+                                            ruleName.setText("");
+                                            ruleReason.setSelection(0);
 
-                                        if (MainActivity.groupState == 0) {
-                                            editRule.setVisibility(View.GONE);
-                                            editGroup2.setVisibility(View.GONE);
-                                            addRule.setVisibility(View.VISIBLE);
-                                            editGroup.setVisibility(View.GONE);
-                                            saveGroup.setVisibility(View.VISIBLE);
-                                            saveGroup2.setVisibility(View.GONE);
-                                        } else {
-                                            editRule.setVisibility(View.GONE);
-                                            editGroup2.setVisibility(View.GONE);
-                                            addRule.setVisibility(View.VISIBLE);
-                                            editGroup.setVisibility(View.VISIBLE);
-                                            saveGroup.setVisibility(View.GONE);
-                                            saveGroup2.setVisibility(View.GONE);
+                                            displayButtons(2);
                                         }
                                     }
                                 });
@@ -368,6 +342,12 @@ public class GroupDetailsFragment extends Fragment {
                                 MainActivity.currentGroup.getRules().remove(ruleIndex);
                                 addNoRuleMessage();
                                 setGroupInfo();
+
+                                ruleType.setSelection(0);
+                                ruleName.setText("");
+                                ruleReason.setSelection(0);
+
+                                displayButtons(2);
                             }
                         }
                     });
@@ -472,6 +452,48 @@ public class GroupDetailsFragment extends Fragment {
     private static void clearRulesList() {
         rulesLayout.removeAllViewsInLayout();
         ruleIndex = 0;
+    }
+
+    private static void displayButtons(int value) {
+        switch (value) {
+            case 1: {
+                if (MainActivity.groupState == 0) {
+                    editRule.setVisibility(View.VISIBLE);
+                    editGroup2.setVisibility(View.GONE);
+                    addRule.setVisibility(View.GONE);
+                    editGroup.setVisibility(View.GONE);
+                    saveGroup.setVisibility(View.GONE);
+                    saveGroup2.setVisibility(View.VISIBLE);
+                } else {
+                    editRule.setVisibility(View.VISIBLE);
+                    editGroup2.setVisibility(View.VISIBLE);
+                    addRule.setVisibility(View.GONE);
+                    editGroup.setVisibility(View.GONE);
+                    saveGroup.setVisibility(View.GONE);
+                    saveGroup2.setVisibility(View.GONE);
+                }
+                break;
+            }
+
+            case 2: {
+                if (MainActivity.groupState == 0) {
+                    editRule.setVisibility(View.GONE);
+                    editGroup2.setVisibility(View.GONE);
+                    addRule.setVisibility(View.VISIBLE);
+                    editGroup.setVisibility(View.GONE);
+                    saveGroup.setVisibility(View.VISIBLE);
+                    saveGroup2.setVisibility(View.GONE);
+                } else {
+                    editRule.setVisibility(View.GONE);
+                    editGroup2.setVisibility(View.GONE);
+                    addRule.setVisibility(View.VISIBLE);
+                    editGroup.setVisibility(View.VISIBLE);
+                    saveGroup.setVisibility(View.GONE);
+                    saveGroup2.setVisibility(View.GONE);
+                }
+                break;
+            }
+        }
     }
 
 }
