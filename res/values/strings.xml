@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">edec</string>
+    <string name="rule_prompt">Select ruleView type</string>
+    <string name="reason_prompt">Select reason</string>
+    <string name="add_new_group">@drawable/plus</string>
+    <string name="my_groups">My Groups</string>
+    <string name="friends_groups">Friends</string>
+    <string name="recommended_groups">Recommended</string>
+    <string name="joined_groups">Joined</string>
+    <string name="search_button">Search Button</string>
+    <string name="search_hint">Search</string>
+    <string name="third_place">3.</string>
+    <string name="item_image">Item Image</string>
+    <string name="trending_groups">Trending</string>
+    <string name="second_place">2.</string>
+    <string name="first_place">1.</string>
+    <string name="top_ingredients">Ingredients</string>
+    <string name="top_products">Products</string>
+    <string name="top_companies">Companies</string>
+    <string name="statistics_title">Worst of the worst</string>
+    <string name="scan_button">Scan Button</string>
+    <string name="product_ingredients">Ingredients</string>
+    <string name="company_logo">Company Logo</string>
+    <string name="produced_by">Produced by</string>
+    <string name="product_status">Product Status</string>
+    <string name="product_logo">Product Logo</string>
+    <string name="product_logo_background">Product Logo Background</string>
+    <string name="product_reasons">What\'s wrong</string>
+    <string name="recommended_products">Recommended</string>
+    <string name="left_arrow">Left Arrow</string>
+    <string name="right_arrow">Right Arrow</string>
+    <string name="group_image">Group Image</string>
+    <string name="group_name">Group Name</string>
+    <string name="group_description">Description</string>
+    <string name="group_description_hint">Group Description</string>
+    <string name="group_rules">Rules</string>
+    <string name="add_new_rule">Add New Rule</string>
+    <string name="rule_name">Name</string>
+    <string name="edit_rule">Edit Rule</string>
+    <string name="join_group">Join Group</string>
+    <string name="leave_group">Leave Group</string>
+    <string name="save_group">Save Group</string>
+    <string name="edit_group">Edit Group</string>
+    <string name="add_rule">Add Rule</string>
+
+    <string-array name="rule_items">
+        <item>Company</item>
+        <item>Ingredient</item>
+        <item>Product</item>
+    </string-array>
+
+    <string-array name="trending_groups">
+        <item>@drawable/mockup_drinks2</item>
+        <item>@drawable/mockup_mushrooms2</item>
+        <item>@drawable/mockup_sugar</item>
+        <item>@drawable/mockup_sweets</item>
+        <item>@drawable/mockup_companies</item>
+        <item>@drawable/mockup_drinks</item>
+    </string-array>
+
+    <string-array name="reason_items">
+        <item>Causes cancer</item>
+        <item>Animal rights infringement</item>
+        <item>Environmental harm</item>
+        <item>Genetic engineering</item>
+        <item>Health effects</item>
+        <item>Human rights abuse</item>
+        <item>Irresponsible marketing</item>
+        <item>Other</item>
+    </string-array>
+</resources>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:id="@+id/ok_scroll">
+
+    <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/background_color"
+            android:id="@+id/ok_product_layout">
+
+
+        <RelativeLayout
+                android:layout_width="350dp"
+                android:layout_height="280dp"
+                android:id="@+id/ok_product_header"
+                android:layout_marginTop="12dp"
+                android:layout_centerHorizontal="true">
+
+
+            <ImageView
+                    android:layout_width="216dp"
+                    android:layout_height="216dp"
+                    android:id="@+id/ok_product_logo_background"
+                    android:contentDescription="@string/product_logo_background"
+                    android:layout_marginLeft="102dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/header_color"/>
+
+            <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:id="@+id/ok_product_logo"
+                    android:contentDescription="@string/product_logo"
+                    android:padding="5dp"
+                    android:layout_marginLeft="110dp"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/white"
+                    android:src="@drawable/mockup_snickers"/>
+
+            <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="90dp"
+                    android:id="@+id/ok_status"
+                    android:layout_marginLeft="32dp"
+                    android:contentDescription="@string/product_status"
+                    android:src="@drawable/tick"/>
+
+            <TextView
+                    android:id="@+id/ok_product_name"
+                    android:layout_width="216dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/header_color"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="102dp"
+                    android:layout_below="@+id/ok_product_logo">
+            </TextView>
+
+        </RelativeLayout>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/header"
+                android:text="@string/produced_by"
+                android:textSize="@dimen/header_text"
+                android:gravity="center"
+                android:background="@drawable/header"
+                android:id="@+id/ok_produced_by"
+                android:layout_below="@+id/ok_product_header"
+                android:layout_marginTop="24dp"
+                android:layout_centerHorizontal="true"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:id="@+id/ok_company_logo"
+                android:layout_marginTop="12dp"
+                android:contentDescription="@string/company_logo"
+                android:src="@drawable/mockup_pepsico2"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_below="@+id/ok_produced_by"
+                android:layout_centerHorizontal="true"/>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:id="@+id/ok_company_name"
+                android:layout_below="@+id/ok_company_logo"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_centerHorizontal="true"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/header"
+                android:text="@string/product_ingredients"
+                android:textSize="@dimen/header_text"
+                android:gravity="center"
+                android:background="@drawable/header"
+                android:id="@+id/ok_ingredients"
+                android:layout_below="@+id/ok_company_name"
+                android:layout_centerHorizontal="true"/>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ok_ingredients_list"
+                android:layout_below="@+id/ok_ingredients"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="6dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical|left"/>
+    </RelativeLayout>
+</ScrollView>

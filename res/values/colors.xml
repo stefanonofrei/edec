@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="blue_thumbnail_color">#ff33b5e5</drawable>
+    <drawable name="white_thumbnail_color">#f8f8f8</drawable>
+    <drawable name="background_color">#d9d9d9</drawable>
+    <drawable name="header_color">#2a5555</drawable>
+
+    <color name="image_border_start">#40990000</color>
+    <color name="image_border_end">#ff660000</color>
+    <color name="image_border_center">#ffff3333</color>
+</resources>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:background="@drawable/background_color"
+        android:id="@+id/view_group_layout">
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_groups_search_layout"
+
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical|left">
+
+        <EditText
+                android:id="@+id/view_group_search"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:textColor="@android:color/black"
+                android:inputType="textCapSentences"
+                android:layout_width="200dp"
+                android:focusable="true"/>
+
+        <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/views_groups_search_button"
+                android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_search"
+                android:contentDescription="@string/search_button"/>
+
+    </LinearLayout>
+
+        <edu.uaic.fii.wad.edec.view.ObservableScrollView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:id="@+id/view_groups_scroll"
+                android:layout_marginTop="12dp"
+                android:layout_below="@id/view_groups_search_layout">
+
+            <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/view_group_lists_layout">
+
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/header"
+                        android:text="@string/my_groups"
+                        android:textSize="@dimen/header_text"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:background="@drawable/header"
+                        android:id="@+id/view_groups_my"
+                        android:layout_below="@+id/view_groups_search_layout"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignLeft="@+id/view_groups_friends"
+                        android:tag="sticky"/>
+
+                <edu.uaic.fii.wad.edec.view.ExpandableHeightGridView
+                        android:id="@+id/view_groups_my_grid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:columnWidth="100dp"
+                        android:gravity="center"
+                        android:numColumns="auto_fit"
+                        android:verticalSpacing="14dp"
+                        android:drawSelectorOnTop="true"
+                        android:stretchMode="columnWidth"
+                        android:layout_below="@+id/view_groups_my"/>
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/header"
+                        android:text="@string/friends_groups"
+                        android:textSize="@dimen/header_text"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:background="@drawable/header"
+                        android:id="@+id/view_groups_friends"
+                        android:layout_below="@+id/view_groups_my_grid"
+                        android:layout_marginTop="14dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentLeft="true"
+                        android:tag="sticky"/>
+
+                <edu.uaic.fii.wad.edec.view.ExpandableHeightGridView
+                        android:id="@+id/view_groups_friends_grid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:columnWidth="100dp"
+                        android:gravity="center"
+                        android:numColumns="auto_fit"
+                        android:verticalSpacing="14dp"
+                        android:drawSelectorOnTop="true"
+                        android:stretchMode="columnWidth"
+                        android:layout_below="@+id/view_groups_friends" />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/header"
+                        android:text="@string/recommended_groups"
+                        android:textSize="@dimen/header_text"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:background="@drawable/header"
+                        android:id="@+id/view_groups_recommendations"
+                        android:layout_below="@+id/view_groups_friends_grid"
+                        android:layout_marginTop="14dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignLeft="@+id/view_groups_my"
+                        android:tag="sticky"/>
+
+                <edu.uaic.fii.wad.edec.view.ExpandableHeightGridView
+                        android:id="@+id/view_groups_recommendations_grid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:columnWidth="100dp"
+                        android:gravity="center"
+                        android:numColumns="auto_fit"
+                        android:verticalSpacing="14dp"
+                        android:drawSelectorOnTop="true"
+                        android:stretchMode="columnWidth"
+                        android:layout_below="@+id/view_groups_recommendations" />
+
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="@dimen/header"
+                        android:text="@string/joined_groups"
+                        android:textSize="@dimen/header_text"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:background="@drawable/header"
+                        android:id="@+id/view_groups_joined"
+                        android:layout_below="@+id/view_groups_recommendations_grid"
+                        android:layout_marginTop="14dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignLeft="@+id/view_groups_my"
+                        android:tag="sticky"/>
+
+                <edu.uaic.fii.wad.edec.view.ExpandableHeightGridView
+                        android:id="@+id/view_groups_joined_grid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:columnWidth="100dp"
+                        android:gravity="center"
+                        android:numColumns="auto_fit"
+                        android:verticalSpacing="14dp"
+                        android:drawSelectorOnTop="true"
+                        android:stretchMode="columnWidth"
+                        android:paddingBottom="14dp"
+                        android:layout_below="@+id/view_groups_joined" />
+
+            </RelativeLayout>
+
+        </edu.uaic.fii.wad.edec.view.ObservableScrollView>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/header"
+                android:text="@string/my_groups"
+                android:textSize="@dimen/header_text"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:background="@drawable/header"
+                android:id="@+id/view_groups_my_top"
+                android:layout_below="@+id/view_groups_search_layout"
+                android:visibility="invisible"
+                android:focusable="true"
+                android:layout_marginTop="12dp"
+                android:focusableInTouchMode="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignLeft="@+id/view_groups_friends"
+                android:tag="sticky"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/header"
+                android:text="@string/friends_groups"
+                android:textSize="@dimen/header_text"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:background="@drawable/header"
+                android:id="@+id/view_groups_friends_top"
+                android:layout_below="@+id/view_groups_my_top"
+                android:visibility="invisible"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
+                android:tag="sticky"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/header"
+                android:text="@string/recommended_groups"
+                android:textSize="@dimen/header_text"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:background="@drawable/header"
+                android:id="@+id/view_groups_recommendations_top"
+                android:layout_below="@+id/view_groups_friends_top"
+                android:visibility="invisible"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignLeft="@+id/view_groups_my"
+                android:tag="sticky"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/header"
+                android:text="@string/joined_groups"
+                android:textSize="@dimen/header_text"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:background="@drawable/header"
+                android:id="@+id/view_groups_joined_top"
+                android:layout_below="@+id/view_groups_recommendations_top"
+                android:visibility="invisible"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignLeft="@+id/view_groups_my"
+                android:tag="sticky"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/header"
+            android:text="@string/my_groups"
+            android:textSize="@dimen/header_text"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:background="@drawable/header"
+            android:id="@+id/view_groups_my_bottom"
+            android:layout_above="@+id/view_groups_recommendations_bottom"
+            android:visibility="visible"
+            android:focusable="true"
+            android:layout_marginTop="12dp"
+            android:focusableInTouchMode="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignLeft="@+id/view_groups_friends"
+            android:tag="sticky"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/header"
+            android:text="@string/friends_groups"
+            android:textSize="@dimen/header_text"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:background="@drawable/header"
+            android:id="@+id/view_groups_friends_bottom"
+            android:layout_above="@+id/view_groups_recommendations_bottom"
+            android:visibility="visible"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentLeft="true"
+            android:tag="sticky"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/header"
+            android:text="@string/recommended_groups"
+            android:textSize="@dimen/header_text"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:background="@drawable/header"
+            android:id="@+id/view_groups_recommendations_bottom"
+            android:layout_above="@+id/view_groups_joined_bottom"
+            android:visibility="visible"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignLeft="@+id/view_groups_my"
+            android:tag="sticky"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/header"
+            android:text="@string/joined_groups"
+            android:textSize="@dimen/header_text"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:background="@drawable/header"
+            android:id="@+id/view_groups_joined_bottom"
+            android:visibility="visible"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignLeft="@+id/view_groups_my"
+            android:tag="sticky"/>
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin">25dp</dimen>
+    <dimen name="space">5dp</dimen>
+    <dimen name="header">30dp</dimen>
+    <dimen name="header_text">15dp</dimen>
+</resources>

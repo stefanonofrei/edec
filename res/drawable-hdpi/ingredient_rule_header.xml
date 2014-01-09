@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <gradient android:startColor="@drawable/blue_thumbnail_color" android:endColor="@drawable/blue_thumbnail_color"/>
+            <corners android:bottomRightRadius="0dp" android:bottomLeftRadius="0dp"
+                     android:topLeftRadius="0dp" android:topRightRadius="0dp"/>
+        </shape>
+
+    </item>
+
+    <item android:state_selected="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <gradient android:startColor="@drawable/blue_thumbnail_color" android:endColor="@drawable/blue_thumbnail_color"/>
+            <corners android:bottomRightRadius="0dp" android:bottomLeftRadius="0dp"
+                     android:topLeftRadius="0dp" android:topRightRadius="0dp"/>
+        </shape>
+
+    </item>
+
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <gradient android:startColor="#c69d7b" android:endColor="#c69d7b"/>
+            <corners android:bottomRightRadius="0dp" android:bottomLeftRadius="0dp"
+                     android:topLeftRadius="0dp" android:topRightRadius="0dp"/>
+        </shape>
+
+    </item>
+</selector>
