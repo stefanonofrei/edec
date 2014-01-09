@@ -2,7 +2,6 @@ package edu.uaic.fii.wad.edec.service.group;
 
 import android.os.AsyncTask;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
-import edu.uaic.fii.wad.edec.fragment.GroupsFragment;
 import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
 import edu.uaic.fii.wad.edec.service.util.URLs;
@@ -11,11 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
-
-    public MyGroupsListing() {
-        MainActivity.tasksNumber = 4;
-        new GroupsLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
 
     @Override
     protected Void doInBackground(Void... voids) {
@@ -55,28 +49,5 @@ public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
         MainActivity.loading.show();
     }
 
-    private class GroupsLoadTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            while (true) {
-                if (MainActivity.tasksNumber == MainActivity.completedTasks.get()) {
-                    break;
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            GroupsFragment.addGridViews();
-            MainActivity.loading.dismiss();
-            MainActivity.tasksNumber = -1;
-            MainActivity.completedTasks.set(0);
-        }
-    }
 }

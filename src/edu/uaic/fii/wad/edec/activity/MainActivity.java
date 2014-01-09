@@ -49,6 +49,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static int tasksNumber = -1;
     public static AtomicInteger completedTasks;
+    public static boolean loadAllGroups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         setContentView(R.layout.main_activity);
 
         completedTasks = new AtomicInteger(0);
+        loadAllGroups = true;
 
         loading = new ProgressDialog(this);
         loading.setTitle("Loading");
@@ -103,6 +105,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
             }
         });
+
+        MainActivity.tasksNumber = 4;
+        new GroupsLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         new MyGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new JoinedGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -165,5 +170,30 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
+    }
+
+    private class GroupsLoadTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            while (true) {
+                if (MainActivity.tasksNumber == MainActivity.completedTasks.get()) {
+                    break;
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            GroupsFragment.addGridViews();
+            MainActivity.loading.dismiss();
+            MainActivity.tasksNumber = -1;
+            MainActivity.completedTasks.set(0);
+        }
     }
 }

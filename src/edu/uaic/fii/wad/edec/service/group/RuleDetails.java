@@ -21,7 +21,6 @@ public class RuleDetails extends AsyncTask<Void, Void, Void> {
         ServiceHandler serviceHandler = new ServiceHandler();
 
         try {
-
             String ruleName = "";
             int ruleType = 0;
             int ruleReason = 0;

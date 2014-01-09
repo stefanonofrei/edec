@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.*;
@@ -16,6 +17,7 @@ import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.listener.ScrollViewListener;
 import edu.uaic.fii.wad.edec.model.GridItem;
 import edu.uaic.fii.wad.edec.model.Group;
+import edu.uaic.fii.wad.edec.service.group.DeleteGroup;
 import edu.uaic.fii.wad.edec.view.ExpandableHeightGridView;
 import edu.uaic.fii.wad.edec.service.group.GroupDetails;
 import edu.uaic.fii.wad.edec.view.ObservableScrollView;
@@ -127,12 +129,12 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
         myGridView.setExpanded(true);
         myGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setMessage("Delete group?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //TODO
+                                new DeleteGroup(MainActivity.myGroups.get(i - 1).getId()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

@@ -3,12 +3,12 @@ package edu.uaic.fii.wad.edec.service.handler;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -20,6 +20,8 @@ public class ServiceHandler {
     static String response = null;
     public final static int GET = 1;
     public final static int POST = 2;
+    public final static int PUT = 3;
+    public final static int DELETE = 4;
 
     public ServiceHandler() {
 
@@ -35,23 +37,40 @@ public class ServiceHandler {
             HttpEntity httpEntity = null;
             HttpResponse httpResponse = null;
 
-            if (method == POST) {
-                HttpPost httpPost = new HttpPost(url);
+            switch (method) {
+                case POST: {
+                    HttpPost httpPost = new HttpPost(url);
 
-                if (params != null) {
-                    httpPost.setEntity(new UrlEncodedFormEntity(params));
+                    if (params != null) {
+                        httpPost.setEntity(new UrlEncodedFormEntity(params));
+                    }
+
+                    httpResponse = httpClient.execute(httpPost);
+                    break;
                 }
 
-                httpResponse = httpClient.execute(httpPost);
+                case GET: {
+                    if (params != null) {
+                        String paramString = URLEncodedUtils.format(params, "utf-8");
+                        url += "?" + paramString;
+                    }
+                    HttpGet httpGet = new HttpGet(url);
 
-            } else if (method == GET) {
-                if (params != null) {
-                    String paramString = URLEncodedUtils.format(params, "utf-8");
-                    url += "?" + paramString;
+                    httpResponse = httpClient.execute(httpGet);
+                    break;
                 }
-                HttpGet httpGet = new HttpGet(url);
 
-                httpResponse = httpClient.execute(httpGet);
+                case PUT: {
+                    // TODO
+                    break;
+                }
+
+                case DELETE: {
+                    HttpDelete httpDelete = new HttpDelete(url);
+
+                    httpResponse = httpClient.execute(httpDelete);
+                    break;
+                }
 
             }
 
