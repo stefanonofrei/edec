@@ -11,4 +11,7 @@ public final class URLs {
     public static final String friendsGroupsURL = "http://edec.herokuapp.com/groups/suggest/friends.json";
 
     public static final String recommendedGroupsURL = "http://edec.herokuapp.com/groups/suggest/personal.json";
+
+    public static final String scanURL = "http://edec.herokuapp.com/products/";
+
 }

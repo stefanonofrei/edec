@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.model.Group;
+import edu.uaic.fii.wad.edec.model.Product;
 import edu.uaic.fii.wad.edec.service.group.FriendsGroupsListing;
 import edu.uaic.fii.wad.edec.service.group.JoinedGroupsListing;
 import edu.uaic.fii.wad.edec.service.group.MyGroupsListing;
@@ -33,6 +34,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private static final int SELECT_PICTURE = 1;
 
     public static Group currentGroup;
+    public static Product currentProduct;
 
     /**
      * 0 - add new group

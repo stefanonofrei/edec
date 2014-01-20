@@ -2,6 +2,7 @@ package edu.uaic.fii.wad.edec.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.camera.CameraPreview;
+import edu.uaic.fii.wad.edec.service.scan.ProductInfo;
 import net.sourceforge.zbar.*;
 
 public class ScanProductFragment extends Fragment {
@@ -29,7 +31,7 @@ public class ScanProductFragment extends Fragment {
     public static boolean previewStopped = false;
     private static boolean tapped = false;
 
-    private static PageFragmentListener scanPageListener;
+    public static PageFragmentListener scanPageListener;
 
 
     public ScanProductFragment(PageFragmentListener listener) {
@@ -73,8 +75,6 @@ public class ScanProductFragment extends Fragment {
                 }
             }
         });
-
-
     }
 
     public void onResume() {
@@ -138,13 +138,15 @@ public class ScanProductFragment extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(),
                                "Scan Result: " + sym.getData(), Toast.LENGTH_LONG).show();
 
-                        if (mockFragment == 1) {
+                       /* if (mockFragment == 1) {
                             mockFragment++;
                             scanPageListener.onSwitchToNextFragment(0, mockFragment);
                         } else {
                             mockFragment--;
                             scanPageListener.onSwitchToNextFragment(0, mockFragment);
-                        }
+                        }     */
+
+                        new ProductInfo(sym.getData()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                         barcodeScanned = true;
                         tapped = false;

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
+import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.adapter.TabsPagerAdapter;
 
@@ -51,6 +52,9 @@ public class BadProductFragment extends Fragment {
 
         TextView productName = (TextView) getActivity().findViewById(R.id.bad_product_name);
         productName.setText("Pepsi Can");
+
+        /*TextView productName = (TextView) getActivity().findViewById(R.id.ok_product_name);
+        productName.setText(MainActivity.currentProduct.getName());*/
 
         ImageView companyLogo = (ImageView) getActivity().findViewById(R.id.bad_company_logo);
         companyLogo.setImageResource(R.drawable.mockup_pepsico);
