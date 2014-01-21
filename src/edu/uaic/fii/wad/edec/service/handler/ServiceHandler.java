@@ -3,6 +3,8 @@ package edu.uaic.fii.wad.edec.service.handler;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import edu.uaic.fii.wad.edec.service.util.Token;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -45,6 +47,8 @@ public class ServiceHandler {
                         httpPost.setEntity(new UrlEncodedFormEntity(params));
                     }
 
+                    httpPost.setHeader("Authorization", Token.CURRENT);
+
                     httpResponse = httpClient.execute(httpPost);
                     break;
                 }
@@ -55,6 +59,8 @@ public class ServiceHandler {
                         url += "?" + paramString;
                     }
                     HttpGet httpGet = new HttpGet(url);
+
+                    httpGet.setHeader("Authorization", Token.CURRENT);
 
                     httpResponse = httpClient.execute(httpGet);
                     break;
@@ -67,6 +73,8 @@ public class ServiceHandler {
 
                 case DELETE: {
                     HttpDelete httpDelete = new HttpDelete(url);
+
+                    httpDelete.setHeader("Authorization", Token.CURRENT);
 
                     httpResponse = httpClient.execute(httpDelete);
                     break;
