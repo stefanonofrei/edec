@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -105,8 +106,12 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
         ExpandableHeightGridView myGridView = (ExpandableHeightGridView) view.findViewById(R.id.view_groups_my_grid);
 
         ArrayList myGroups = new ArrayList();
+        byte[] decodedString;
+        Bitmap decodedByte;
         for (int i = 0; i < MainActivity.myGroups.size(); i++) {
-            myGroups.add(new GridItem(null, MainActivity.myGroups.get(i).getName()));
+            decodedString = Base64.decode(MainActivity.myGroups.get(i).getLogo(), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            myGroups.add(new GridItem(decodedByte, MainActivity.myGroups.get(i).getName()));
         }
 
         Bitmap bitmap = BitmapFactory.decodeResource(fragment.getResources(), R.string.add_new_group);
@@ -165,8 +170,12 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
 
     private static void addFriendsGridView() {
         ArrayList friendsGroups = new ArrayList();
+        byte[] decodedString;
+        Bitmap decodedByte;
         for (int i = 0; i < MainActivity.friendsGroups.size(); i++) {
-            friendsGroups.add(new GridItem(null, MainActivity.friendsGroups.get(i).getName()));
+            decodedString = Base64.decode(MainActivity.friendsGroups.get(i).getLogo(), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            friendsGroups.add(new GridItem(decodedByte, MainActivity.friendsGroups.get(i).getName()));
         }
 
         friendsGroupsCustomGridAdapter = new GridViewAdapter(view.getContext(), R.layout.grid_item, friendsGroups);
@@ -177,20 +186,20 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
         friendsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /*if (i == 0) {
-                    Group group = MainActivity.friendsGroups.get(0);
-                    MainActivity.currentGroup = group;
-                    MainActivity.groupState = 2;
-                    pageListener.onSwitchToNextFragment(1, 0);
-                }*/
+                MainActivity.groupState = 2;
+                new GroupDetails(MainActivity.friendsGroups.get(i).getId()).execute();
             }
         });
     }
 
     private static void addRecommendedGridView() {
         ArrayList recommendedGroups = new ArrayList();
+        byte[] decodedString;
+        Bitmap decodedByte;
         for (int i = 0; i < MainActivity.recommendationsGroups.size(); i++) {
-            recommendedGroups.add(new GridItem(null, MainActivity.recommendationsGroups.get(i).getName()));
+            decodedString = Base64.decode(MainActivity.recommendationsGroups.get(i).getLogo(), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            recommendedGroups.add(new GridItem(decodedByte, MainActivity.recommendationsGroups.get(i).getName()));
         }
 
         recommendedGroupsCustomGridAdapter = new GridViewAdapter(view.getContext(), R.layout.grid_item, recommendedGroups);
@@ -209,8 +218,12 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
 
     private static void addJoinedGridView() {
         ArrayList joinedGroups = new ArrayList();
+        byte[] decodedString;
+        Bitmap decodedByte;
         for (int i = 0; i < MainActivity.joinedGroups.size(); i++) {
-            joinedGroups.add(new GridItem(null, MainActivity.joinedGroups.get(i).getName()));
+            decodedString = Base64.decode(MainActivity.joinedGroups.get(i).getLogo(), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            joinedGroups.add(new GridItem(decodedByte, MainActivity.joinedGroups.get(i).getName()));
         }
 
         ExpandableHeightGridView joinedGridView = (ExpandableHeightGridView) view.findViewById(R.id.view_groups_joined_grid);

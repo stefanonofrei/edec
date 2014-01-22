@@ -18,8 +18,7 @@ public class SaveGroup extends AsyncTask<Void, Void, Void> {
         JSONObject group = new JSONObject();
         try {
             group.put("title", MainActivity.currentGroup.getName());
-            // TODO base64 image problem
-            group.put("logo", "");
+            group.put("logo", MainActivity.currentGroup.getLogo());
             group.put("description", MainActivity.currentGroup.getDescription());
 
             JSONArray rules = new JSONArray();

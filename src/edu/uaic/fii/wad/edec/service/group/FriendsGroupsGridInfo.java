@@ -23,7 +23,9 @@ public class FriendsGroupsGridInfo extends AsyncTask<Void, Void, Void> {
                     JSONObject group = new JSONObject(jsonStr);
 
                     String name = group.getString("title");
+                    String logo = group.getString("logo");
                     MainActivity.friendsGroups.get(i).setName(name);
+                    MainActivity.friendsGroups.get(i).setLogo(logo);
                 } catch (JSONException ex) {
                     System.out.println(ex.getMessage());
                 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -273,6 +274,12 @@ public class GroupDetailsFragment extends Fragment {
         ruleIndex = 0;
         this.groupName.setText(MainActivity.currentGroup.getName());
         this.groupDescription.setText(MainActivity.currentGroup.getDescription());
+
+        if (MainActivity.groupState != 0) {
+            byte[] decodedString = Base64.decode(MainActivity.currentGroup.getLogo(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            groupLogo.setImageBitmap(decodedByte);
+        }
 
         if (MainActivity.currentGroup.getRules().size() > 0) {
             removeNoRuleMessage();

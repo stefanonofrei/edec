@@ -20,8 +20,7 @@ public class EditGroup extends AsyncTask<Void, Void, Void> {
         try {
             Log.d("new group name", MainActivity.currentGroup.getName());
             group.put("title", MainActivity.currentGroup.getName());
-            // TODO base64 image problem
-            group.put("logo", "");
+            group.put("logo", MainActivity.currentGroup.getLogo());
             group.put("description", MainActivity.currentGroup.getDescription());
 
             JSONArray rules = new JSONArray();
