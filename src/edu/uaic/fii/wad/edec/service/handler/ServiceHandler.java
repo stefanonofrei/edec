@@ -13,6 +13,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -71,7 +72,15 @@ public class ServiceHandler {
                 }
 
                 case PUT: {
-                    // TODO PUT
+                    HttpPut httpPut = new HttpPut(url);
+
+                    StringEntity entity = new StringEntity(json.toString());
+                    entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    httpPut.setEntity(entity);
+
+                    httpPut.setHeader("Authorization", Token.CURRENT);
+
+                    httpResponse = httpClient.execute(httpPut);
                     break;
                 }
 
@@ -83,7 +92,6 @@ public class ServiceHandler {
                     httpResponse = httpClient.execute(httpDelete);
                     break;
                 }
-
             }
 
             if (httpResponse != null) {

@@ -38,6 +38,7 @@ public class GroupDetails extends AsyncTask<Void, Void, Void> {
                 MainActivity.currentGroup.setId(id);
                 MainActivity.currentGroup.setName(name);
                 MainActivity.currentGroup.setDescription(description);
+                MainActivity.currentGroup.setLogo(logo);
 
                 MainActivity.tasksNumber = rules.length();
                 new RulesLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

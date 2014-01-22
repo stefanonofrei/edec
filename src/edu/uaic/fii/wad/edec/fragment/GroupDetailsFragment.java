@@ -17,6 +17,7 @@ import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.model.Rule;
 import edu.uaic.fii.wad.edec.listener.RuleOnClickListener;
+import edu.uaic.fii.wad.edec.service.group.EditGroup;
 import edu.uaic.fii.wad.edec.service.group.SaveGroup;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
 import edu.uaic.fii.wad.edec.service.util.URLs;
@@ -361,12 +362,11 @@ public class GroupDetailsFragment extends Fragment {
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
                             if (item == 0) {
-                                Rule r = MainActivity.currentGroup.getRules().get(ruleIndex);
-                                ruleType.setSelection(r.getType());
+                                ruleType.setSelection(MainActivity.currentGroup.getRule(ruleIndex).getType());
                                 ruleType.setEnabled(false);
-                                ruleName.setText(r.getName());
+                                ruleName.setText(MainActivity.currentGroup.getRule(ruleIndex).getName());
                                 ruleName.setEnabled(false);
-                                ruleReason.setSelection(r.getReason());
+                                ruleReason.setSelection(MainActivity.currentGroup.getRule(ruleIndex).getReason());
 
                                 displayButtons(1);
 
@@ -492,22 +492,21 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void editGroup() {
-      /*  //mocking the shit out of this as well
+        MainActivity.currentGroup.setName(this.groupName.getText().toString());
+        MainActivity.currentGroup.setDescription(this.groupDescription.getText().toString());
 
-        String groupName = this.groupName.getText().toString();
-        String groupDescription = this.groupDescription.getText().toString();
-        Bitmap bitmap = ((BitmapDrawable) groupLogo.getDrawable()).getBitmap();
+        groupLogo.buildDrawingCache();
+        Bitmap bitmap = groupLogo.getDrawingCache();
 
-        GroupsFragment.newGroupName = groupName;
-        GroupsFragment.thumb = bitmap;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        byte[] image = stream.toByteArray();
+        String imageBase64 = Base64.encodeToString(image, 0);
+        MainActivity.currentGroup.setLogo(imageBase64);
 
-        //Collections.reverse(MainActivity.myGroups);
-        MainActivity.myGroups.remove(MainActivity.myGroups.size() - 1);
-        MainActivity.myGroups.add(new Group("" + MainActivity.myGroups.size(), groupName, MainActivity.currentGroupRules, groupDescription));
-        //Collections.reverse(MainActivity.myGroups);
+        new EditGroup().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        GroupsFragment.myGroupsCustomGridAdapter.notifyDataSetChanged();
-        pageListener.onSwitchToNextFragment(1, 0);   */
+        GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
 
     }
 

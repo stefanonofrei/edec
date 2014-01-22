@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.model.Rule;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
+import edu.uaic.fii.wad.edec.service.util.Reasons;
 import edu.uaic.fii.wad.edec.service.util.URLs;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ public class RuleDetails extends AsyncTask<Void, Void, Void> {
         try {
             String ruleName = "";
             int ruleType = 0;
-            int ruleReason = 0;
+            String ruleReason = "";
 
             String item_id = rule.getString("item_id");
             String filter_reason_id = rule.getString("filter_reason_id");
@@ -42,10 +43,11 @@ public class RuleDetails extends AsyncTask<Void, Void, Void> {
                 JSONObject reason = new JSONObject(jsonStr);
 
                 ruleType = getRuleType(reason.getString("for_resource"));
-                ruleReason = getRuleReason(reason.getString("id"));
+                ruleReason = reason.getString("id");
             }
 
-            MainActivity.currentGroup.addRule(new Rule(ruleType, ruleName, ruleReason - 1, item_id));
+            MainActivity.currentGroup.addRule(new Rule(ruleType, ruleName,
+                    Reasons.getReasonIdFromURL(ruleType, ruleReason), item_id));
         } catch (JSONException ex) {
             System.out.println(ex.getMessage());
         }
@@ -68,9 +70,5 @@ public class RuleDetails extends AsyncTask<Void, Void, Void> {
         } else {
             return 2;
         }
-    }
-
-    private int getRuleReason(String type) {
-        return Integer.parseInt(type.substring(type.length() - 1));
     }
 }

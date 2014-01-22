@@ -1,6 +1,7 @@
 package edu.uaic.fii.wad.edec.service.group;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
 import edu.uaic.fii.wad.edec.service.util.Reasons;
@@ -9,7 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SaveGroup extends AsyncTask<Void, Void, Void> {
+public class EditGroup extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
@@ -17,6 +18,7 @@ public class SaveGroup extends AsyncTask<Void, Void, Void> {
 
         JSONObject group = new JSONObject();
         try {
+            Log.d("new group name", MainActivity.currentGroup.getName());
             group.put("title", MainActivity.currentGroup.getName());
             // TODO base64 image problem
             group.put("logo", "");
@@ -40,7 +42,8 @@ public class SaveGroup extends AsyncTask<Void, Void, Void> {
             System.out.println(e.getMessage());
         }
 
-        serviceHandler.makeServiceCall(URLs.baseURL + "/groups.json", ServiceHandler.POST, null, group);
+        serviceHandler.makeServiceCall(URLs.baseURL + MainActivity.currentGroup.getId() + ".json",
+                ServiceHandler.PUT, null, group);
 
         return null;
     }
