@@ -10,11 +10,13 @@ public class Rule {
     private int type;
     private String name;
     private int reason;
+    private String id;
 
-    public Rule(int type, String name, int reason) {
+    public Rule(int type, String name, int reason, String id) {
         this.type = type;
         this.name = name;
         this.reason = reason;
+        this.id = id;
     }
 
     public int getType() {
@@ -39,6 +41,14 @@ public class Rule {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

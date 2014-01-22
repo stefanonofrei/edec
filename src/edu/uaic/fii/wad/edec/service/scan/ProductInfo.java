@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.fragment.ScanProductFragment;
-import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.model.Product;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
 import edu.uaic.fii.wad.edec.service.util.URLs;
@@ -44,8 +43,6 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
                 JSONObject company = product.getJSONObject("company");
                 String id = company.getString("id");
 
-                Log.d("company id", id);
-
                 new CompanyInfo(id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 MainActivity.tasksNumber += ingredients.length();
@@ -68,8 +65,9 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
+        MainActivity.tasksNumber++;
         MainActivity.completedTasks.incrementAndGet();
-        //new MyGroupsGridInfo().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new ProductVerdict(this.id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -96,7 +94,11 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            ScanProductFragment.scanPageListener.onSwitchToNextFragment(0, 1);
+            if (MainActivity.currentProduct.getStatus().equals("green")) {
+                ScanProductFragment.scanPageListener.onSwitchToNextFragment(0, 1);
+            } else {
+                ScanProductFragment.scanPageListener.onSwitchToNextFragment(0, 2);
+            }
             MainActivity.loading.dismiss();
             MainActivity.tasksNumber = -1;
             MainActivity.completedTasks.set(0);

@@ -25,7 +25,6 @@ public class ScanProductFragment extends Fragment {
     private static Handler autoFocusHandler;
     private static ImageScanner scanner;
 
-    private static boolean barcodeScanned = false;
     private static boolean previewing = true;
 
     public static boolean previewStopped = false;
@@ -66,7 +65,6 @@ public class ScanProductFragment extends Fragment {
         scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (!tapped) {
-                    barcodeScanned = false;
                     tapped = true;
                     mCamera.setPreviewCallback(previewCb);
                     mCamera.startPreview();
@@ -113,8 +111,6 @@ public class ScanProductFragment extends Fragment {
         }
     };
 
-    private static int mockFragment = 1;
-
     private Camera.PreviewCallback previewCb = new Camera.PreviewCallback() {
         public void onPreviewFrame(byte[] data, Camera camera) {
 
@@ -138,17 +134,8 @@ public class ScanProductFragment extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(),
                                "Scan Result: " + sym.getData(), Toast.LENGTH_LONG).show();
 
-                       /* if (mockFragment == 1) {
-                            mockFragment++;
-                            scanPageListener.onSwitchToNextFragment(0, mockFragment);
-                        } else {
-                            mockFragment--;
-                            scanPageListener.onSwitchToNextFragment(0, mockFragment);
-                        }     */
-
                         new ProductInfo(sym.getData()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-                        barcodeScanned = true;
                         tapped = false;
                     }
                 }

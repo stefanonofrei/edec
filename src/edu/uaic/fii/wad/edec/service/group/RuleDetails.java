@@ -45,7 +45,7 @@ public class RuleDetails extends AsyncTask<Void, Void, Void> {
                 ruleReason = getRuleReason(reason.getString("id"));
             }
 
-            MainActivity.currentGroup.addRule(new Rule(ruleType, ruleName, ruleReason - 1));
+            MainActivity.currentGroup.addRule(new Rule(ruleType, ruleName, ruleReason - 1, item_id));
         } catch (JSONException ex) {
             System.out.println(ex.getMessage());
         }

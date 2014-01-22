@@ -28,12 +28,14 @@ public class GroupDetails extends AsyncTask<Void, Void, Void> {
             try {
                 JSONObject group = new JSONObject(jsonStr);
 
+                String id = group.getString("id");
                 String name = group.getString("title");
                 String description = group.getString("description");
                 String logo = group.getString("logo");
                 JSONArray rules = group.getJSONArray("rules");
 
                 MainActivity.currentGroup = new Group();
+                MainActivity.currentGroup.setId(id);
                 MainActivity.currentGroup.setName(name);
                 MainActivity.currentGroup.setDescription(description);
 

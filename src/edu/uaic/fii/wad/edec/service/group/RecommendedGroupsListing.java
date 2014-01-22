@@ -26,7 +26,7 @@ public class RecommendedGroupsListing extends AsyncTask<Void, Void, Void> {
                     JSONObject group = groups.getJSONObject(i);
 
                     String id = group.getString("id");
-                    MainActivity.recommendationsGroups.add(new Group(id, null, null, null));
+                    MainActivity.recommendationsGroups.add(new Group(id, null, null, null, null));
                 }
             } catch (JSONException ex) {
                 System.out.println(ex.getMessage());

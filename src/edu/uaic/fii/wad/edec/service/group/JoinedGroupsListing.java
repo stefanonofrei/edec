@@ -26,7 +26,7 @@ public class JoinedGroupsListing extends AsyncTask<Void, Void, Void> {
                     JSONObject group = groups.getJSONObject(i);
 
                     String id = group.getString("id");
-                    MainActivity.joinedGroups.add(new Group(id, null, null, null));
+                    MainActivity.joinedGroups.add(new Group(id, null, null, null, null));
                 }
             } catch (JSONException ex) {
                 System.out.println(ex.getMessage());

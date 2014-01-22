@@ -3,10 +3,13 @@ package edu.uaic.fii.wad.edec.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -14,6 +17,14 @@ import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.model.Rule;
 import edu.uaic.fii.wad.edec.listener.RuleOnClickListener;
+import edu.uaic.fii.wad.edec.service.group.SaveGroup;
+import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
+import edu.uaic.fii.wad.edec.service.util.URLs;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 public class GroupDetailsFragment extends Fragment {
 
@@ -27,19 +38,21 @@ public class GroupDetailsFragment extends Fragment {
     private static Button addRule;
     private static Button saveGroup;
     private static Button saveGroup2;
-    private static Button joinGroup;
-    private static Button leaveGroup;
     private static Button editGroup;
     private static Button editGroup2;
     private static Button editRule;
 
     private static LinearLayout rulesLayout;
     private LinearLayout.LayoutParams rulesLayoutParams;
-    private TextView ruleView;
     private TextView rulesMessage;
     private static int ruleIndex = 0;
     public static ImageView groupLogo;
     public static int RESULT_LOAD_IMAGE = 1;
+    public static String currentItemId = "";
+
+    private int ruleTypeIndex;
+    private String ruleNameString;
+    private int ruleReasonIndex;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
         scanPageListener = listener;
@@ -50,6 +63,8 @@ public class GroupDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.group_details_fragment, container, false);
+
+        ruleIndex = 0;
 
         groupLogo = (ImageView) view.findViewById(R.id.add_group_logo);
         this.groupName = (EditText) view.findViewById(R.id.add_group_name);
@@ -66,9 +81,32 @@ public class GroupDetailsFragment extends Fragment {
         this.ruleName = (EditText) view.findViewById(R.id.add_group_rule_name);
 
         this.ruleReason = (Spinner) view.findViewById(R.id.add_group_rule_reason);
-        adapter = ArrayAdapter.createFromResource(getActivity(), R.array.reason_items, R.layout.spinner_item);
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        this.ruleReason.setAdapter(adapter);
+
+        this.ruleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ArrayAdapter adapter;
+                if (i == 0) {
+                    adapter = ArrayAdapter.createFromResource(getActivity(), R.array.companies_reasons, R.layout.spinner_item);
+                } else if (i == 1) {
+                    adapter = ArrayAdapter.createFromResource(getActivity(), R.array.ingredients_reasons, R.layout.spinner_item);
+                } else {
+                    adapter = ArrayAdapter.createFromResource(getActivity(), R.array.products_reasons, R.layout.spinner_item);
+                }
+
+                if (adapter != null) {
+                    adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                    ruleReason.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // ...
+            }
+        });
+
+
 
         rulesLayout = (LinearLayout) view.findViewById(R.id.add_group_existing_rules_list);
 
@@ -96,7 +134,28 @@ public class GroupDetailsFragment extends Fragment {
         addRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addRule();
+                ruleTypeIndex = ruleType.getSelectedItemPosition();
+                ruleNameString = ruleName.getText().toString();
+                ruleReasonIndex = ruleReason.getSelectedItemPosition();
+
+                String URL = URLs.baseURL;
+
+                switch (ruleTypeIndex) {
+                    case 0: {
+                        URL += "/companies/" + ruleNameString + "/search.json";
+                        break;
+                    }
+                    case 1: {
+                        URL += "/ingredients/" + ruleNameString + "/search.json";
+                        break;
+                    }
+                    case 2: {
+                        URL += "/products/" + ruleNameString + "/search.json";
+                        break;
+                    }
+                }
+
+                new SearchItem(URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -116,7 +175,7 @@ public class GroupDetailsFragment extends Fragment {
             }
         });
 
-        joinGroup = (Button) view.findViewById(R.id.add_group_join);
+        Button joinGroup = (Button) view.findViewById(R.id.add_group_join);
         joinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +183,7 @@ public class GroupDetailsFragment extends Fragment {
             }
         });
 
-        leaveGroup = (Button) view.findViewById(R.id.add_group_leave);
+        Button leaveGroup = (Button) view.findViewById(R.id.add_group_leave);
         leaveGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,6 +256,7 @@ public class GroupDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ruleIndex = 0;
         if (MainActivity.groupState == 0) {
             setGroupInfo();
         }
@@ -209,6 +269,7 @@ public class GroupDetailsFragment extends Fragment {
 
 
     public void setGroupInfo() {
+        ruleIndex = 0;
         this.groupName.setText(MainActivity.currentGroup.getName());
         this.groupDescription.setText(MainActivity.currentGroup.getDescription());
 
@@ -224,34 +285,37 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void addRule() {
-        int ruleTypeIndex = this.ruleType.getSelectedItemPosition();
-        String ruleNameString = this.ruleName.getText().toString();
-        int ruleReasonIndex = this.ruleReason.getSelectedItemPosition();
+        Rule rule;
 
-        Rule rule = new Rule(ruleTypeIndex, ruleNameString, ruleReasonIndex);
+        if (!currentItemId.equals("")) {
+            rule = new Rule(ruleTypeIndex, ruleNameString, ruleReasonIndex, currentItemId);
+            //Toast.makeText(getActivity().getApplicationContext(), currentItemId, Toast.LENGTH_LONG).show();
 
-        if (MainActivity.currentGroup.getRules().contains(rule)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Replace existing ruleView?")
-                   .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //TODO
-                        }
-                    })
-                   .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // ..
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-        } else {
-            if (MainActivity.currentGroup.getRules().isEmpty()) {
-                removeNoRuleMessage();
+            if (MainActivity.currentGroup.getRules().contains(rule)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Replace existing ruleView?")
+                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //TODO replace existing rule
+                            }
+                        })
+                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // ..
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            } else {
+                if (MainActivity.currentGroup.getRules().isEmpty()) {
+                    removeNoRuleMessage();
+                }
+
+                MainActivity.currentGroup.addRule(rule);
+                displayRule(ruleNameString, ruleTypeIndex);
             }
-
-            MainActivity.currentGroup.addRule(rule);
-            displayRule(ruleNameString, ruleTypeIndex);
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), "Item does not exist!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -259,7 +323,7 @@ public class GroupDetailsFragment extends Fragment {
         if (MainActivity.currentGroup.getRules().size() == 1) {
             this.removeNoRuleMessage();
         }
-        ruleView = new TextView(getActivity());
+        TextView ruleView = new TextView(getActivity());
         ruleView.setText(ruleNameString);
         ruleView.setHeight(50);
         ruleView.setTextColor(Color.BLACK);
@@ -299,7 +363,9 @@ public class GroupDetailsFragment extends Fragment {
                             if (item == 0) {
                                 Rule r = MainActivity.currentGroup.getRules().get(ruleIndex);
                                 ruleType.setSelection(r.getType());
+                                ruleType.setEnabled(false);
                                 ruleName.setText(r.getName());
+                                ruleName.setEnabled(false);
                                 ruleReason.setSelection(r.getReason());
 
                                 displayButtons(1);
@@ -312,11 +378,9 @@ public class GroupDetailsFragment extends Fragment {
                                             String ruleNameString = ruleName.getText().toString();
                                             int ruleReasonIndex = ruleReason.getSelectedItemPosition();
 
-                                            Rule modifiedRule = MainActivity.currentGroup.getRules().get(ruleIndex);
-                                            modifiedRule.setName(ruleNameString);
-                                            modifiedRule.setType(ruleTypeIndex);
-                                            modifiedRule.setReason(ruleReasonIndex);
-
+                                            MainActivity.currentGroup.getRule(ruleIndex).setName(ruleNameString);
+                                            MainActivity.currentGroup.getRule(ruleIndex).setType(ruleTypeIndex);
+                                            MainActivity.currentGroup.getRule(ruleIndex).setReason(ruleReasonIndex);
 
                                             TextView rule = (TextView) rulesLayout.getChildAt(ruleIndex);
                                             rule.setText(ruleNameString);
@@ -329,7 +393,9 @@ public class GroupDetailsFragment extends Fragment {
                                             }
 
                                             ruleType.setSelection(0);
+                                            ruleType.setEnabled(true);
                                             ruleName.setText("");
+                                            ruleName.setEnabled(true);
                                             ruleReason.setSelection(0);
 
                                             displayButtons(2);
@@ -341,6 +407,8 @@ public class GroupDetailsFragment extends Fragment {
                                 clearRulesList();
                                 MainActivity.currentGroup.getRules().remove(ruleIndex);
                                 addNoRuleMessage();
+                                MainActivity.currentGroup.setName(groupName.getText().toString());
+                                MainActivity.currentGroup.setDescription(groupDescription.getText().toString());
                                 setGroupInfo();
 
                                 ruleType.setSelection(0);
@@ -373,19 +441,21 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void saveGroup() {
-       /*
-        String groupName = this.groupName.getText().toString();
-        String groupDescription = this.groupDescription.getText().toString();
-        MainActivity.myGroups.add(new Group("" + MainActivity.myGroups.size(), groupName, MainActivity.currentGroupRules, groupDescription));
+        MainActivity.currentGroup.setName(this.groupName.getText().toString());
+        MainActivity.currentGroup.setDescription(this.groupDescription.getText().toString());
 
-        //Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.plus);
-        Bitmap bitmap = ((BitmapDrawable) groupLogo.getDrawable()).getBitmap();
-        MainActivity.newMyGroups.add((new GridItem(bitmap, groupName)));
-        GroupsFragment.myGroupsCustomGridAdapter.notifyDataSetChanged();
+        groupLogo.buildDrawingCache();
+        Bitmap bitmap = groupLogo.getDrawingCache();
 
-        pageListener.onSwitchToNextFragment(1, 0);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+        byte[] image = stream.toByteArray();
+        String imageBase64 = Base64.encodeToString(image, 0);
+        MainActivity.currentGroup.setLogo(imageBase64);
 
-        Log.i("working rules", "" + MainActivity.currentGroupRules.size());  */
+        new SaveGroup().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
     }
 
     public void joinGroup() {
@@ -496,4 +566,54 @@ public class GroupDetailsFragment extends Fragment {
         }
     }
 
+    private class SearchItem extends AsyncTask<Void, Void, Void> {
+
+        private String URL;
+
+        public SearchItem(String URL) {
+            this.URL = URL;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ServiceHandler serviceHandler = new ServiceHandler();
+            String jsonStr = serviceHandler.makeServiceCall(URL, ServiceHandler.GET);
+
+            if (jsonStr != null) {
+                try {
+                    JSONArray items = new JSONArray(jsonStr);
+
+                    if (items.length() > 0) {
+                        JSONObject searchResult = items.getJSONObject(0);
+                        currentItemId = searchResult.getString("id");
+
+                        jsonStr = serviceHandler.makeServiceCall(URLs.baseURL + currentItemId + ".json", ServiceHandler.GET);
+
+                        if (jsonStr != null) {
+                            JSONObject item = new JSONObject(jsonStr);
+                            ruleNameString = item.getString("name");
+                        }
+                    }  else {
+                        currentItemId = "";
+                    }
+                } catch (JSONException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            addRule();
+        }
+    }
 }

@@ -26,7 +26,7 @@ public class FriendsGroupsListing extends AsyncTask<Void, Void, Void> {
                     JSONObject group = groups.getJSONObject(i);
 
                     String id = group.getString("id");
-                    MainActivity.friendsGroups.add(new Group(id, null, null, null));
+                    MainActivity.friendsGroups.add(new Group(id, null, null, null, null));
                 }
             } catch (JSONException ex) {
                 System.out.println(ex.getMessage());

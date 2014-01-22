@@ -1,34 +1,34 @@
-package edu.uaic.fii.wad.edec.service.group;
+package edu.uaic.fii.wad.edec.service.scan;
 
 import android.os.AsyncTask;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
-import edu.uaic.fii.wad.edec.model.Group;
+import edu.uaic.fii.wad.edec.model.Reason;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
 import edu.uaic.fii.wad.edec.service.util.URLs;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
+public class FilterReasonInfo extends AsyncTask<Void, Void, Void> {
+
+    private String id;
+
+    public FilterReasonInfo(String id) {
+        this.id = id;
+    }
 
     @Override
     protected Void doInBackground(Void... voids) {
         ServiceHandler serviceHandler = new ServiceHandler();
-        String jsonStr = serviceHandler.makeServiceCall(URLs.createdGroupsURL, ServiceHandler.GET);
-
-
-        MainActivity.myGroups.clear();
+        String jsonStr = serviceHandler.makeServiceCall(URLs.baseURL + id + ".json", ServiceHandler.GET);
 
         if (jsonStr != null) {
             try {
-                JSONArray groups = new JSONArray(jsonStr);
+                JSONObject product = new JSONObject(jsonStr);
 
-                for (int i = 0; i < groups.length(); i++) {
-                    JSONObject group = groups.getJSONObject(i);
-
-                    String id = group.getString("id");
-                    MainActivity.myGroups.add(new Group(id, null, null, null, null));
-                }
+                String description = product.getString("short_description");
+                Reason reason = new Reason();
+                reason.setName(description);
+                MainActivity.currentProduct.addReason(reason);
             } catch (JSONException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -41,7 +41,7 @@ public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        new MyGroupsGridInfo().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        MainActivity.completedTasks.incrementAndGet();
     }
 
     @Override
@@ -49,6 +49,4 @@ public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
         super.onPreExecute();
         MainActivity.loading.show();
     }
-
-
 }

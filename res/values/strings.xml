@@ -69,4 +69,22 @@
         <item>Irresponsible marketing</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="companies_reasons">
+        <item>Causes cancer</item>
+        <item>Unwanted ingredients</item>
+        <item>Irresponsible marketing</item>
+    </string-array>
+
+    <string-array name="products_reasons">
+        <item>Bad for health</item>
+        <item>Genetic engineering</item>
+        <item>Justin Beiber</item>
+    </string-array>
+
+    <string-array name="ingredients_reasons">
+        <item>Allergies</item>
+        <item>Intolerance</item>
+        <item>Health issues (Diabetes)</item>
+    </string-array>
 </resources>

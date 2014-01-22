@@ -7,6 +7,7 @@ import java.util.List;
 public class Product {
 
     private String barcode;
+    private String status;
     private String name;
     private String image;
     private Company company;
@@ -21,9 +22,10 @@ public class Product {
         this.recommended = Collections.synchronizedList(new ArrayList<Product>());
     }
 
-    public Product(String barcode, String name, String image, Company company,
+    public Product(String barcode, String status, String name, String image, Company company,
                    List<Ingredient> ingredients, List<Reason> reasons, List<Product> recommended) {
         this.barcode = barcode;
+        this.status = status;
         this.name = name;
         this.image = image;
         this.company = company;
@@ -94,5 +96,21 @@ public class Product {
 
     public Ingredient getIngredient(int i) {
         return this.ingredients.get(i);
+    }
+
+    public void addReason(Reason reason) {
+        this.reasons.add(reason);
+    }
+
+    public Reason getReason(int i) {
+        return this.reasons.get(i);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
