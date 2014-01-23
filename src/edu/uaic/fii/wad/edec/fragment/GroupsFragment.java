@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -36,6 +35,9 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
 
     private TextView my, myTop, myBottom, personal, personalTop, personalBottom, friends, friendsTop,
             friendsBottom, joined, joinedTop, joinedBottom;
+    private ImageView searchButton;
+    private EditText searchEditText;
+    public static String searchQuery;
     final int[] myCoordinates = new int[2];
     final int[] myTopCoordinates = new int[2];
     final int[] myBottomCoordinates = new int[2];
@@ -68,6 +70,20 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
 
         fragment = this;
         activity = getActivity();
+
+        searchButton = (ImageView) view.findViewById(R.id.views_groups_search_button);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchEditText = (EditText) GroupsFragment.view.findViewById(R.id.view_group_search);
+                searchQuery = searchEditText.getText().toString();
+
+                //TODO search request
+
+                pageListener.onSwitchToNextFragment(1, 2);
+            }
+        });
 
         my = (TextView) view.findViewById(R.id.view_groups_my);
         myTop = (TextView) view.findViewById(R.id.view_groups_my_top);
@@ -148,7 +164,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
                 if (i == 0) {
                     MainActivity.groupState = 0;
                     MainActivity.currentGroup = new Group();
-                    pageListener.onSwitchToNextFragment(1, 0);
+                    pageListener.onSwitchToNextFragment(1, 1);
                 } else {
                     MainActivity.groupState = 1;
                     new GroupDetails(MainActivity.myGroups.get(i - 1).getId(), 1).execute();

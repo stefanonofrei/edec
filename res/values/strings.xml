@@ -43,6 +43,7 @@
     <string name="save_group">Save Group</string>
     <string name="edit_group">Edit Group</string>
     <string name="add_rule">Add Rule</string>
+    <string name="search_results">Search Results</string>
 
     <string-array name="rule_items">
         <item>Company</item>

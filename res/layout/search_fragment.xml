@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/background_color">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/header"
+            android:text="@string/search_results"
+            android:textSize="@dimen/header_text"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:background="@drawable/header"
+            android:id="@+id/stats_trending"
+            android:layout_marginTop="14dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:tag="sticky"/>
+
+    <edu.uaic.fii.wad.edec.view.ExpandableHeightGridView
+            android:id="@+id/search_groups_grid"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:columnWidth="100dp"
+            android:gravity="center"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="14dp"
+            android:drawSelectorOnTop="true"
+            android:stretchMode="columnWidth" />
+
+</LinearLayout>

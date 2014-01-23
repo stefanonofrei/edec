@@ -37,7 +37,7 @@ import java.io.IOException;
 
 public class GroupDetailsFragment extends Fragment {
 
-    public static PageFragmentListener scanPageListener;
+    public static PageFragmentListener pageListener;
 
     private Spinner ruleType;
     private EditText ruleName;
@@ -65,7 +65,7 @@ public class GroupDetailsFragment extends Fragment {
     public static int parent;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
-        scanPageListener = listener;
+        pageListener = listener;
     }
 
     @Override
@@ -273,7 +273,7 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void backPressed() {
-        scanPageListener.onSwitchToNextFragment(parent, 0);
+        pageListener.onSwitchToNextFragment(parent, 0);
         ruleIndex = 0;
     }
 

@@ -136,20 +136,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 ((OkProductFragment) mAdapter.getItem(0)).backPressed();
             } else if (mAdapter.getItem(0) instanceof BadProductFragment) {
                 ((BadProductFragment) mAdapter.getItem(0)).backPressed();
-            }
-            else if (mAdapter.getItem(0) instanceof ScanProductFragment) {
+            } else if (mAdapter.getItem(0) instanceof ScanProductFragment) {
                 finish();
             }
         } else if (viewPager.getCurrentItem() == 1) {
             if (mAdapter.getItem(1) instanceof GroupDetailsFragment) {
                 ((GroupDetailsFragment) mAdapter.getItem(1)).backPressed();
-            } else {
+            } else if (mAdapter.getItem(1) instanceof SearchFragment) {
+                ((SearchFragment) mAdapter.getItem(1)).backPressed();
+            } else if (mAdapter.getItem(1) instanceof GroupsFragment) {
                 finish();
             }
         } else if (viewPager.getCurrentItem() == 2) {
             if (mAdapter.getItem(2) instanceof GroupDetailsFragment) {
                 ((GroupDetailsFragment) mAdapter.getItem(2)).backPressed();
-            } else {
+            } else if (mAdapter.getItem(2) instanceof StatisticsFragment) {
                 finish();
             }
         } else {

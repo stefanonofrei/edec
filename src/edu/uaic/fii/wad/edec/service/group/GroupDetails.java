@@ -111,7 +111,7 @@ public class GroupDetails extends AsyncTask<Void, Void, Void> {
 
             GroupDetailsFragment.parent = parent;
             if (parent == 1) {
-                GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
+                GroupsFragment.pageListener.onSwitchToNextFragment(1, 1);
             } else if (parent == 2) {
                 StatisticsFragment.pageListener.onSwitchToNextFragment(2, 0);
             }

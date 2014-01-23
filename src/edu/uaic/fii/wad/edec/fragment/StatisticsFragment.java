@@ -25,7 +25,7 @@ import edu.uaic.fii.wad.edec.adapter.GridViewAdapter;
 import java.util.ArrayList;
 import android.os.AsyncTask;
 
-public class StatisticsFragment extends Fragment{
+public class StatisticsFragment extends Fragment {
 
     public static PageFragmentListener pageListener;
     private static View view;
