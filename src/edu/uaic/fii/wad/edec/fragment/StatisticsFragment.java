@@ -82,7 +82,7 @@ public class StatisticsFragment extends Fragment{
         myGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                MainActivity.groupState = 2;
+                MainActivity.groupState = setGroupUserAssociation(groupList.get(i).getId());
                 new GroupDetails(groupList.get(i).getId()).execute();
                 viewPager.setCurrentItem(1);
             }
@@ -120,6 +120,7 @@ public class StatisticsFragment extends Fragment{
                 new TopIngredients(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 new TrendingGroups(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
+
 
         }
     }
@@ -181,6 +182,7 @@ public class StatisticsFragment extends Fragment{
             Bitmap bitmap = ImageBase64.decodeImage(groupList.get(i).getLogo());
             newImages.add(new GridItem(bitmap, groupList.get(i).getName()));
         }
+        imageItems.clear();
         imageItems.addAll(newImages);
         customGridAdapter.notifyDataSetChanged();
     }
@@ -221,5 +223,19 @@ public class StatisticsFragment extends Fragment{
         if(productsList != null && companiesList != null && ingredientsList != null && groupList != null) {
             barProgressDialog.dismiss();
         }
+    }
+
+    public int setGroupUserAssociation(String id){
+        for(Group group:MainActivity.myGroups){
+            if(group.getId().equals(id)){
+                return 1;
+            }
+        }
+        for(Group group:MainActivity.joinedGroups){
+            if(group.getId().equals(id)){
+                return 3;
+            }
+        }
+        return 2;
     }
 }
