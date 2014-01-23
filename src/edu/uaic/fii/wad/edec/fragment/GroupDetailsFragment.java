@@ -62,6 +62,7 @@ public class GroupDetailsFragment extends Fragment {
     private int ruleTypeIndex;
     private String ruleNameString;
     private int ruleReasonIndex;
+    public static int parent;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
         scanPageListener = listener;
@@ -272,7 +273,7 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void backPressed() {
-        scanPageListener.onSwitchToNextFragment(1, 0);
+        scanPageListener.onSwitchToNextFragment(parent, 0);
         ruleIndex = 0;
     }
 
@@ -475,13 +476,13 @@ public class GroupDetailsFragment extends Fragment {
     public void joinGroup() {
         new GroupMigration(MainActivity.currentGroup.getId(), "/join").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
+        GroupsFragment.pageListener.onSwitchToNextFragment(parent, 0);
     }
 
     public void leaveGroup() {
         new GroupMigration(MainActivity.currentGroup.getId(), "/leave").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
+        GroupsFragment.pageListener.onSwitchToNextFragment(parent, 0);
     }
 
     public void editGroup() {

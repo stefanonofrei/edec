@@ -1,23 +1,18 @@
 package edu.uaic.fii.wad.edec.fragment;
 
 import android.app.ProgressDialog;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
+import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.model.*;
 import edu.uaic.fii.wad.edec.service.group.GroupDetails;
 import edu.uaic.fii.wad.edec.service.stats.TopCompanies;
@@ -28,20 +23,21 @@ import edu.uaic.fii.wad.edec.service.util.ImageBase64;
 import edu.uaic.fii.wad.edec.view.ExpandableHeightGridView;
 import edu.uaic.fii.wad.edec.adapter.GridViewAdapter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import android.os.AsyncTask;
 
 public class StatisticsFragment extends Fragment{
 
-    GridViewAdapter customGridAdapter;
-    ProgressDialog barProgressDialog;
-    private ViewPager viewPager;
+    public static PageFragmentListener pageListener;
+    private static View view;
+
+    private GridViewAdapter customGridAdapter;
+    private ProgressDialog barProgressDialog;
     public static ArrayList<Company> companiesList;
     public static ArrayList<Product> productsList;
     public static ArrayList<Ingredient> ingredientsList;
     public static ArrayList<Group> groupList;
 
-    private ArrayList imageItems = new ArrayList();
+    private ArrayList<GridItem> imageItems = new ArrayList<GridItem>();
 
     private ImageView firstCompany;
     private ImageView secondCompany;
@@ -67,12 +63,14 @@ public class StatisticsFragment extends Fragment{
     private TextView secondIngredientName;
     private TextView thirdIngredientName;
 
-
+    public StatisticsFragment(PageFragmentListener listener) {
+        pageListener = listener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.statistics_fragment, container, false);
+        view = inflater.inflate(R.layout.statistics_fragment, container, false);
 
         ExpandableHeightGridView myGridView = (ExpandableHeightGridView) view.findViewById(R.id.stats_trending_groups_grid);
         customGridAdapter = new GridViewAdapter(view.getContext(), R.layout.grid_item, imageItems);
@@ -83,11 +81,14 @@ public class StatisticsFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MainActivity.groupState = setGroupUserAssociation(groupList.get(i).getId());
-                new GroupDetails(groupList.get(i).getId()).execute();
-                viewPager.setCurrentItem(1);
+                new GroupDetails(groupList.get(i).getId(), 2).execute();
             }
         });
 
+        if(productsList != null && companiesList != null && ingredientsList != null && groupList != null) {
+            getViewElements();
+            refreshData();
+        }
 
         return view;
     }
@@ -120,9 +121,14 @@ public class StatisticsFragment extends Fragment{
                 new TopIngredients(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 new TrendingGroups(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
-
-
         }
+    }
+
+    private void refreshData() {
+        refreshCompaniesData();
+        refreshProductsData();
+        refreshIngredientsData();
+        refreshGroupData();
     }
 
     public void refreshCompaniesData(){
@@ -176,7 +182,7 @@ public class StatisticsFragment extends Fragment{
     }
 
     public void refreshGroupData(){
-        ArrayList newImages = new ArrayList();
+        ArrayList<GridItem> newImages = new ArrayList<GridItem>();
         for(int i = 0; i < groupList.size(); i++){
 
             Bitmap bitmap = ImageBase64.decodeImage(groupList.get(i).getLogo());
@@ -188,40 +194,39 @@ public class StatisticsFragment extends Fragment{
     }
 
     public void getViewElements(){
+        firstCompany = (ImageView) view.findViewById(R.id.stats_first_company_logo);
+        firstCompanyName = (TextView) view.findViewById(R.id.stats_first_company_name);
 
-        viewPager = (ViewPager) getActivity().findViewById(edu.uaic.fii.wad.edec.R.id.pager);
-        firstCompany = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_first_company_logo);
-        firstCompanyName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_first_company_name);
+        secondCompany = (ImageView) view.findViewById(R.id.stats_second_company_logo);
+        secondCompanyName = (TextView) view.findViewById(R.id.stats_second_company_name);
 
-        secondCompany = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_second_company_logo);
-        secondCompanyName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_second_company_name);
+        thirdCompany = (ImageView) view.findViewById(R.id.stats_third_company_logo);
+        thirdCompanyName = (TextView) view.findViewById(R.id.stats_third_company_name);
 
-        thirdCompany = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_third_company_logo);
-        thirdCompanyName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_third_company_name);
+        firstProduct = (ImageView) view.findViewById(R.id.stats_first_product_logo);
+        firstProductName = (TextView) view.findViewById(R.id.stats_first_product_name);
 
-        firstProduct = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_first_product_logo);
-        firstProductName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_first_product_name);
+        secondProduct= (ImageView) view.findViewById(R.id.stats_second_product_logo);
+        secondProductName = (TextView) view.findViewById(R.id.stats_second_product_name);
 
-        secondProduct= (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_second_product_logo);
-        secondProductName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_second_product_name);
+        thirdProduct = (ImageView) view.findViewById(R.id.stats_third_product_logo);
+        thirdProductName = (TextView) view.findViewById(R.id.stats_third_product_name);
 
-        thirdProduct = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_third_product_logo);
-        thirdProductName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_third_product_name);
+        firstIngredient = (ImageView) view.findViewById(R.id.stats_first_ingredient_logo);
+        firstIngredientName = (TextView) view.findViewById(R.id.stats_first_ingredient_name);
 
-        firstIngredient = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_first_ingredient_logo);
-        firstIngredientName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_first_ingredient_name);
+        secondIngredient= (ImageView) view.findViewById(R.id.stats_second_ingredient_logo);
+        secondIngredientName = (TextView) view.findViewById(R.id.stats_second_ingredient_name);
 
-        secondIngredient= (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_second_ingredient_logo);
-        secondIngredientName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_second_ingredient_name);
-
-        thirdIngredient = (ImageView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_third_ingredient_logo);
-        thirdIngredientName = (TextView) getView().findViewById(edu.uaic.fii.wad.edec.R.id.stats_third_ingredient_name);
-
+        thirdIngredient = (ImageView) view.findViewById(R.id.stats_third_ingredient_logo);
+        thirdIngredientName = (TextView) view.findViewById(R.id.stats_third_ingredient_name);
     }
 
     public void verifyTasks(){
         if(productsList != null && companiesList != null && ingredientsList != null && groupList != null) {
-            barProgressDialog.dismiss();
+            if (barProgressDialog != null) {
+                barProgressDialog.dismiss();
+            }
         }
     }
 

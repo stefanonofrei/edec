@@ -2,7 +2,9 @@ package edu.uaic.fii.wad.edec.service.group;
 
 import android.os.AsyncTask;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
+import edu.uaic.fii.wad.edec.fragment.GroupDetailsFragment;
 import edu.uaic.fii.wad.edec.fragment.GroupsFragment;
+import edu.uaic.fii.wad.edec.fragment.StatisticsFragment;
 import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.service.util.Token;
 import edu.uaic.fii.wad.edec.service.util.URLs;
@@ -20,9 +22,11 @@ import java.io.IOException;
 public class GroupDetails extends AsyncTask<Void, Void, Void> {
 
     private String id;
+    private int parent;
 
-    public GroupDetails(String id) {
+    public GroupDetails(String id, int parent) {
         this.id = id;
+        this.parent = parent;
     }
 
     @Override
@@ -105,7 +109,12 @@ public class GroupDetails extends AsyncTask<Void, Void, Void> {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
+            GroupDetailsFragment.parent = parent;
+            if (parent == 1) {
+                GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
+            } else if (parent == 2) {
+                StatisticsFragment.pageListener.onSwitchToNextFragment(2, 0);
+            }
             MainActivity.loading.dismiss();
             MainActivity.tasksNumber = -1;
             MainActivity.completedTasks.set(0);

@@ -146,6 +146,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             } else {
                 finish();
             }
+        } else if (viewPager.getCurrentItem() == 2) {
+            if (mAdapter.getItem(2) instanceof GroupDetailsFragment) {
+                ((GroupDetailsFragment) mAdapter.getItem(2)).backPressed();
+            } else {
+                finish();
+            }
         } else {
             finish();
         }

@@ -12,6 +12,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     private final FragmentManager mFragmentManager;
     public Fragment mFragmentAtPos0;
     public Fragment mFragmentAtPos1;
+    public Fragment mFragmentAtPos2;
     private PageListener listener = new PageListener();
     public static boolean onResultFragment = false;
 
@@ -43,6 +44,14 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 } else {
                     mFragmentAtPos1 = new GroupDetailsFragment(listener);
                 }
+            } else if (fragment == 2) {
+                mFragmentManager.beginTransaction().remove(mFragmentAtPos2).commit();
+
+                if (mFragmentAtPos2 instanceof StatisticsFragment) {
+                    mFragmentAtPos2 = new GroupDetailsFragment(listener);
+                } else {
+                    mFragmentAtPos2 = new StatisticsFragment(listener);
+                }
             }
 
             notifyDataSetChanged();
@@ -70,7 +79,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 }
                 return mFragmentAtPos1;
             case 2:
-                return new StatisticsFragment();
+                if (mFragmentAtPos2 == null) {
+                    mFragmentAtPos2 = new StatisticsFragment(listener);
+                }
+                return mFragmentAtPos2;
         }
 
         return null;
@@ -101,6 +113,13 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return POSITION_NONE;
         }
         if (object instanceof GroupsFragment && mFragmentAtPos1 instanceof GroupDetailsFragment) {
+            return POSITION_NONE;
+        }
+
+        if (object instanceof StatisticsFragment && mFragmentAtPos2 instanceof GroupDetailsFragment) {
+            return POSITION_NONE;
+        }
+        if (object instanceof GroupDetailsFragment && mFragmentAtPos2 instanceof StatisticsFragment) {
             return POSITION_NONE;
         }
 

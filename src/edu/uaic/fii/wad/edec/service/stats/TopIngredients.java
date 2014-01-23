@@ -1,16 +1,20 @@
 package edu.uaic.fii.wad.edec.service.stats;
 
 import android.os.AsyncTask;
-import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.fragment.StatisticsFragment;
-import edu.uaic.fii.wad.edec.model.Company;
 import edu.uaic.fii.wad.edec.model.Ingredient;
-import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
+import edu.uaic.fii.wad.edec.service.util.Token;
 import edu.uaic.fii.wad.edec.service.util.URLs;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,9 +34,26 @@ public class TopIngredients extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        ServiceHandler serviceHandler = new ServiceHandler();
-        String jsonStr = serviceHandler.makeServiceCall(URLs.topURL + "ingredients.json", ServiceHandler.GET);
-        System.out.println(jsonStr);
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpEntity httpEntity = null;
+        HttpResponse httpResponse;
+        HttpGet httpGet = new HttpGet(URLs.topURL + "ingredients.json");
+
+        httpGet.setHeader("Authorization", Token.CURRENT);
+
+        String jsonStr = null;
+
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            if (httpResponse != null) {
+                httpEntity = httpResponse.getEntity();
+            }
+
+            jsonStr = EntityUtils.toString(httpEntity);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
         if (jsonStr != null) {
             try {
                 JSONArray ingredients = new JSONArray(jsonStr);
@@ -63,8 +84,26 @@ public class TopIngredients extends AsyncTask<Void, Void, Void> {
     }
 
     private void addIngredientInfo(String id){
-        ServiceHandler serviceHandler = new ServiceHandler();
-        String jsonStr = serviceHandler.makeServiceCall(URLs.baseURL + id + ".json", ServiceHandler.GET);
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpEntity httpEntity = null;
+        HttpResponse httpResponse;
+        HttpGet httpGet = new HttpGet(URLs.baseURL + id + ".json");
+
+        httpGet.setHeader("Authorization", Token.CURRENT);
+
+        String jsonStr = null;
+
+        try {
+            httpResponse = httpClient.execute(httpGet);
+            if (httpResponse != null) {
+                httpEntity = httpResponse.getEntity();
+            }
+
+            jsonStr = EntityUtils.toString(httpEntity);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
         if (jsonStr != null) {
             try {
                 JSONObject ingredient = new JSONObject(jsonStr);

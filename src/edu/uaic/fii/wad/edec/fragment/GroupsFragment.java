@@ -151,7 +151,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
                     pageListener.onSwitchToNextFragment(1, 0);
                 } else {
                     MainActivity.groupState = 1;
-                    new GroupDetails(MainActivity.myGroups.get(i - 1).getId()).execute();
+                    new GroupDetails(MainActivity.myGroups.get(i - 1).getId(), 1).execute();
                 }
             }
         });
@@ -176,7 +176,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MainActivity.groupState = 2;
-                new GroupDetails(MainActivity.friendsGroups.get(i).getId()).execute();
+                new GroupDetails(MainActivity.friendsGroups.get(i).getId(), 1).execute();
             }
         });
     }
@@ -200,7 +200,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MainActivity.groupState = 2;
-                new GroupDetails(MainActivity.recommendationsGroups.get(i).getId()).execute();
+                new GroupDetails(MainActivity.recommendationsGroups.get(i).getId(), 1).execute();
             }
         });
     }
@@ -224,7 +224,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MainActivity.groupState = 3;
-                new GroupDetails(MainActivity.joinedGroups.get(i).getId()).execute();
+                new GroupDetails(MainActivity.joinedGroups.get(i).getId(), 1).execute();
             }
         });
     }
