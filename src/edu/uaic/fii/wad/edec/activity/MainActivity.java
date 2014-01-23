@@ -22,6 +22,8 @@ import edu.uaic.fii.wad.edec.adapter.TabsPagerAdapter;
 import edu.uaic.fii.wad.edec.fragment.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -44,10 +46,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      */
     public static int groupState = 0;
 
-    public static ArrayList<Group> myGroups = new ArrayList<Group>();
-    public static ArrayList<Group> joinedGroups = new ArrayList<Group>();
-    public static ArrayList<Group> recommendationsGroups = new ArrayList<Group>();
-    public static ArrayList<Group> friendsGroups = new ArrayList<Group>();
+    public static List<Group> myGroups = Collections.synchronizedList(new ArrayList<Group>());
+    public static List<Group> joinedGroups = Collections.synchronizedList(new ArrayList<Group>());
+    public static List<Group> recommendationsGroups = Collections.synchronizedList(new ArrayList<Group>());
+    public static List<Group> friendsGroups = Collections.synchronizedList(new ArrayList<Group>());
 
     public static int tasksNumber = -1;
     public static AtomicInteger completedTasks;
@@ -108,13 +110,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             }
         });
 
-        MainActivity.tasksNumber = 4;
-        new GroupsLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        new MyGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new JoinedGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new RecommendedGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new FriendsGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        loadGroups();
 
     }
 
@@ -174,7 +170,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         return cursor.getString(column_index);
     }
 
-    private class GroupsLoadTask extends AsyncTask<Void, Void, Void> {
+    public static void loadGroups() {
+        MainActivity.tasksNumber = 4;
+        new GroupsLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        new MyGroupsListing().execute();
+        new JoinedGroupsListing().execute();
+        new RecommendedGroupsListing().execute();
+        new FriendsGroupsListing().execute();
+    }
+
+    private static class GroupsLoadTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {

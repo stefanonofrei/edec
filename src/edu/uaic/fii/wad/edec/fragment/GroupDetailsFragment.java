@@ -19,14 +19,21 @@ import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.model.Rule;
 import edu.uaic.fii.wad.edec.listener.RuleOnClickListener;
 import edu.uaic.fii.wad.edec.service.group.EditGroup;
+import edu.uaic.fii.wad.edec.service.group.GroupMigration;
 import edu.uaic.fii.wad.edec.service.group.SaveGroup;
-import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
+import edu.uaic.fii.wad.edec.service.util.Token;
 import edu.uaic.fii.wad.edec.service.util.URLs;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class GroupDetailsFragment extends Fragment {
 
@@ -466,36 +473,15 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void joinGroup() {
-       /* String groupName = this.groupName.getText().toString();
-        String groupDescription = this.groupDescription.getText().toString();
-        MainActivity.joinedGroups.add(new Group("" + MainActivity.joinedGroups.size(), groupName, MainActivity.currentGroupRules, groupDescription));
+        new GroupMigration(MainActivity.currentGroup.getId(), "/join").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.string.companies);
-        MainActivity.newJoinedGroups.add((new GridItem(bitmap, groupName)));
-        GroupsFragment.joinedGroupsCustomGridAdapter.notifyDataSetChanged();
-
-
-        //MainActivity.friendsGroups.add(new Group(MainActivity.friendsGroups.size(), groupName, MainActivity.currentGroupRules, groupDescription));
-        MainActivity.oldFriendsGroups.add((new GridItem(bitmap, groupName)));
-        GroupsFragment.friendsGroupsCustomGridAdapter.notifyDataSetChanged();
-
-
-        pageListener.onSwitchToNextFragment(1, 0);    */
+        GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
     }
 
     public void leaveGroup() {
-      /*  //mocking the shit out of it
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.string.companies);
-        MainActivity.newJoinedGroups.remove(MainActivity.newJoinedGroups.size() - 1);
-        GroupsFragment.joinedGroupsCustomGridAdapter.notifyDataSetChanged();
+        new GroupMigration(MainActivity.currentGroup.getId(), "/leave").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-
-        //MainActivity.friendsGroups.add(new Group(MainActivity.friendsGroups.size(), groupName, MainActivity.currentGroupRules, groupDescription));
-        MainActivity.oldFriendsGroups.remove(MainActivity.oldFriendsGroups.size() - 1);
-        GroupsFragment.friendsGroupsCustomGridAdapter.notifyDataSetChanged();
-
-
-        pageListener.onSwitchToNextFragment(1, 0);      */
+        GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
     }
 
     public void editGroup() {
@@ -582,8 +568,25 @@ public class GroupDetailsFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            ServiceHandler serviceHandler = new ServiceHandler();
-            String jsonStr = serviceHandler.makeServiceCall(URL, ServiceHandler.GET);
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpEntity httpEntity = null;
+            HttpResponse httpResponse;
+            HttpGet httpGet = new HttpGet(URL);
+
+            httpGet.setHeader("Authorization", Token.CURRENT);
+
+            String jsonStr = null;
+
+            try {
+                httpResponse = httpClient.execute(httpGet);
+                if (httpResponse != null) {
+                    httpEntity = httpResponse.getEntity();
+                }
+
+                jsonStr = EntityUtils.toString(httpEntity);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
 
             if (jsonStr != null) {
                 try {
@@ -593,7 +596,20 @@ public class GroupDetailsFragment extends Fragment {
                         JSONObject searchResult = items.getJSONObject(0);
                         currentItemId = searchResult.getString("id");
 
-                        jsonStr = serviceHandler.makeServiceCall(URLs.baseURL + currentItemId + ".json", ServiceHandler.GET);
+                        httpGet = new HttpGet(URLs.baseURL + currentItemId + ".json");
+
+                        httpGet.setHeader("Authorization", Token.CURRENT);
+
+                        try {
+                            httpResponse = httpClient.execute(httpGet);
+                            if (httpResponse != null) {
+                                httpEntity = httpResponse.getEntity();
+                            }
+
+                            jsonStr = EntityUtils.toString(httpEntity);
+                        } catch (IOException e) {
+                            System.out.println(e.getMessage());
+                        }
 
                         if (jsonStr != null) {
                             JSONObject item = new JSONObject(jsonStr);

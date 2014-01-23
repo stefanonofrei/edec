@@ -24,7 +24,7 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
         ServiceHandler serviceHandler = new ServiceHandler();
         String jsonStr = serviceHandler.makeServiceCall(URLs.scanURL + id + ".json", ServiceHandler.GET);
 
-        MainActivity.tasksNumber = 2;  //just product info and company info (no rules & reasons);
+        MainActivity.tasksNumber = 2;
         new ProductLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         if (jsonStr != null) {

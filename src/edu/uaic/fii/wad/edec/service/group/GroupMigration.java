@@ -2,7 +2,6 @@ package edu.uaic.fii.wad.edec.service.group;
 
 import android.os.AsyncTask;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
-import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.service.util.Token;
 import edu.uaic.fii.wad.edec.service.util.URLs;
 import org.apache.http.HttpEntity;
@@ -10,20 +9,25 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
+public class GroupMigration extends AsyncTask<Void, Void, Void> {
+
+    private String id;
+    private String action;
+
+    public GroupMigration(String id, String action) {
+        this.id = id;
+        this.action = action;
+    }
 
     @Override
     protected Void doInBackground(Void... voids) {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpEntity httpEntity = null;
         HttpResponse httpResponse;
-        HttpGet httpGet = new HttpGet(URLs.createdGroupsURL);
+        HttpGet httpGet = new HttpGet(URLs.baseURL + id + action + ".json");
 
         httpGet.setHeader("Authorization", Token.CURRENT);
 
@@ -40,36 +44,21 @@ public class MyGroupsListing extends AsyncTask<Void, Void, Void> {
             System.out.println(e.getMessage());
         }
 
-        MainActivity.myGroups.clear();
-        if (jsonStr != null) {
-            try {
-                JSONArray groups = new JSONArray(jsonStr);
-                for (int i = 0; i < groups.length(); i++) {
-                    JSONObject group = groups.getJSONObject(i);
-
-                    String id = group.getString("id");
-                    MainActivity.myGroups.add(new Group(id, null, null, null, null));
-                }
-            } catch (JSONException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-
         return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        MainActivity.loading.show();
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        new MyGroupsGridInfo().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        MainActivity.loadAllGroups = true;
+        MainActivity.loadGroups();
     }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        MainActivity.loading.show();
-    }
-
-
 }

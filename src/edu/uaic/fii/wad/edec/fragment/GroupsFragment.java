@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -33,8 +34,6 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
 
     public static PageFragmentListener pageListener;
 
-    private ObservableScrollView scrollView = null;
-
     private TextView my, myTop, myBottom, personal, personalTop, personalBottom, friends, friendsTop,
             friendsBottom, joined, joinedTop, joinedBottom;
     final int[] myCoordinates = new int[2];
@@ -54,7 +53,6 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
     public static GridViewAdapter friendsGroupsCustomGridAdapter;
     public static GridViewAdapter joinedGroupsCustomGridAdapter;
     public static GridViewAdapter recommendedGroupsCustomGridAdapter;
-    public static String newGroupName = "";
     public static Bitmap thumb = null;
     public static Activity activity;
 
@@ -89,7 +87,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
 
 
         addGridViews();
-        scrollView = (ObservableScrollView) view.findViewById(R.id.view_groups_scroll);
+        ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.view_groups_scroll);
         scrollView.setScrollViewListener(this);
 
         return view;
@@ -105,7 +103,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
     private static void addMyGridView() {
         ExpandableHeightGridView myGridView = (ExpandableHeightGridView) view.findViewById(R.id.view_groups_my_grid);
 
-        ArrayList myGroups = new ArrayList();
+        ArrayList<GridItem> myGroups = new ArrayList<GridItem>();
         byte[] decodedString;
         Bitmap decodedByte;
         for (int i = 0; i < MainActivity.myGroups.size(); i++) {
@@ -119,15 +117,6 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
         Collections.reverse(myGroups);
         myGroups.add(new GridItem(bitmap, "Add New Group"));
         Collections.reverse(myGroups);
-
-        GridItem last = (GridItem) myGroups.get(MainActivity.myGroups.size());
-
-        if (!newGroupName.equals("")) {
-            last.setTitle(MainActivity.myGroups.get(MainActivity.myGroups.size() - 1).getName());
-        }
-        if (thumb != null) {
-            last.setImage(thumb);
-        }
 
         myGroupsCustomGridAdapter = new GridViewAdapter(view.getContext(), R.layout.grid_item, myGroups);
         myGridView.setAdapter(myGroupsCustomGridAdapter);
@@ -169,7 +158,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
     }
 
     private static void addFriendsGridView() {
-        ArrayList friendsGroups = new ArrayList();
+        ArrayList<GridItem> friendsGroups = new ArrayList<GridItem>();
         byte[] decodedString;
         Bitmap decodedByte;
         for (int i = 0; i < MainActivity.friendsGroups.size(); i++) {
@@ -193,7 +182,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
     }
 
     private static void addRecommendedGridView() {
-        ArrayList recommendedGroups = new ArrayList();
+        ArrayList<GridItem> recommendedGroups = new ArrayList<GridItem>();
         byte[] decodedString;
         Bitmap decodedByte;
         for (int i = 0; i < MainActivity.recommendationsGroups.size(); i++) {
@@ -217,7 +206,7 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
     }
 
     private static void addJoinedGridView() {
-        ArrayList joinedGroups = new ArrayList();
+        ArrayList<GridItem> joinedGroups = new ArrayList<GridItem>();
         byte[] decodedString;
         Bitmap decodedByte;
         for (int i = 0; i < MainActivity.joinedGroups.size(); i++) {
@@ -226,8 +215,8 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
             joinedGroups.add(new GridItem(decodedByte, MainActivity.joinedGroups.get(i).getName()));
         }
 
-        ExpandableHeightGridView joinedGridView = (ExpandableHeightGridView) view.findViewById(R.id.view_groups_joined_grid);
         joinedGroupsCustomGridAdapter = new GridViewAdapter(view.getContext(), R.layout.grid_item, joinedGroups);
+        ExpandableHeightGridView joinedGridView = (ExpandableHeightGridView) view.findViewById(R.id.view_groups_joined_grid);
         joinedGridView.setAdapter(joinedGroupsCustomGridAdapter);
         joinedGridView.setExpanded(true);
 

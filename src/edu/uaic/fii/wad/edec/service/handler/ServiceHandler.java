@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import android.os.AsyncTask;
 import android.util.Log;
 import edu.uaic.fii.wad.edec.service.util.Token;
 import org.apache.http.HttpEntity;
@@ -107,7 +108,8 @@ public class ServiceHandler {
             System.out.println(ex.getMessage());
         }
 
-        Log.d(url, response);
+        //if (url.equals("http://edec.herokuapp.com/groups/created.json"))
+            Log.d(url, response);
         return response;
     }
 }
