@@ -4,10 +4,12 @@ public class Ingredient {
 
     private String id;
     private String name;
+    private String image;
 
-    public Ingredient(String id, String name) {
+    public Ingredient(String id, String name, String image) {
         this.id = id;
         this.name = name;
+        this.image = image;
     }
 
     public String getId() {
@@ -24,5 +26,13 @@ public class Ingredient {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

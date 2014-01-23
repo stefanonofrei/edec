@@ -50,7 +50,7 @@ public class IngredientInfo extends AsyncTask<Void, Void, Void> {
                 JSONObject ingredient = new JSONObject(jsonStr);
 
                 String name = ingredient.getString("name");
-                MainActivity.currentProduct.addIngredient(new Ingredient(id, name));
+                MainActivity.currentProduct.addIngredient(new Ingredient(id, name, ""));
 
             } catch (JSONException ex) {
                 System.out.println(ex.getMessage());

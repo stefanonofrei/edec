@@ -14,4 +14,8 @@ public final class URLs {
 
     public static final String scanURL = "http://edec.herokuapp.com/products/";
 
+    public static final String topURL = "http://edec.herokuapp.com/stats/top/";
+
+    public static final String trendingURL = "http://edec.herokuapp.com/groups/trending.json";
+
 }

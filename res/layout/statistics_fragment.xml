@@ -73,7 +73,6 @@
                     <ImageView
                             android:id="@+id/stats_first_company_logo"
                             android:contentDescription="@string/item_image"
-                            android:src="@drawable/mockup_nestle"
                             android:layout_width="200dp"
                             android:layout_height="200dp" >
                     </ImageView>
@@ -92,7 +91,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Nestlé S.A."
                         android:textColor="@android:color/black"
                         android:gravity="center"
                         android:textSize="12dp" >
@@ -128,7 +126,6 @@
                         <ImageView
                                 android:id="@+id/stats_second_company_logo"
                                 android:contentDescription="@string/item_image"
-                                android:src="@drawable/mockup_sysco"
                                 android:layout_gravity="center"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
@@ -150,7 +147,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Sysco Corporation"
                             android:textColor="@android:color/black"
                             android:gravity="center"
                             android:textSize="12dp" >
@@ -177,7 +173,6 @@
                         <ImageView
                                 android:id="@+id/stats_third_company_logo"
                                 android:contentDescription="@string/item_image"
-                                android:src="@drawable/mockup_pepsico"
                                 android:layout_gravity="center"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
@@ -199,7 +194,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="PepsiCo Inc."
                             android:textColor="@android:color/black"
                             android:gravity="center"
 
@@ -259,7 +253,6 @@
                     <ImageView
                             android:id="@+id/stats_first_product_logo"
                             android:contentDescription="@string/item_image"
-                            android:src="@drawable/mockup_coca_cola_light"
                             android:layout_width="200dp"
                             android:layout_height="200dp" >
                     </ImageView>
@@ -278,7 +271,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Coca-Cola Light"
                         android:textColor="@android:color/black"
                         android:gravity="center"
                         android:textSize="12dp" >
@@ -314,7 +306,6 @@
                         <ImageView
                                 android:id="@+id/stats_second_product_logo"
                                 android:contentDescription="@string/item_image"
-                                android:src="@drawable/mockup_hula_hoops"
                                 android:layout_gravity="center"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
@@ -336,7 +327,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Hula Hoops"
                             android:textColor="@android:color/black"
                             android:gravity="center"
                             android:textSize="12dp" >
@@ -362,7 +352,6 @@
                         <ImageView
                                 android:id="@+id/stats_third_product_logo"
                                 android:contentDescription="@string/item_image"
-                                android:src="@drawable/mockup_doritos"
                                 android:layout_gravity="center"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
@@ -384,7 +373,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Doritos Cool Ranch"
                             android:textColor="@android:color/black"
                             android:gravity="center"
                             android:textSize="12dp" >
@@ -442,7 +430,6 @@
                     <ImageView
                             android:id="@+id/stats_first_ingredient_logo"
                             android:contentDescription="@string/item_image"
-                            android:src="@drawable/mockup_coconut"
                             android:layout_width="200dp"
                             android:layout_height="200dp" >
                     </ImageView>
@@ -461,7 +448,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Coconut"
                         android:textColor="@android:color/black"
                         android:gravity="center"
                         android:textSize="12dp" >
@@ -497,7 +483,6 @@
                         <ImageView
                                 android:id="@+id/stats_second_ingredient_logo"
                                 android:contentDescription="@string/item_image"
-                                android:src="@drawable/mockup_olives"
                                 android:layout_gravity="center"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
@@ -519,7 +504,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Olives"
                             android:textColor="@android:color/black"
                             android:gravity="center"
                             android:textSize="12dp" >
@@ -545,7 +529,6 @@
                         <ImageView
                                 android:id="@+id/stats_third_ingredient_logo"
                                 android:contentDescription="@string/item_image"
-                                android:src="@drawable/mockup_mushrooms"
                                 android:layout_gravity="center"
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
@@ -567,7 +550,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Mushrooms"
                             android:textColor="@android:color/black"
                             android:gravity="center"
                             android:textSize="12dp" >
