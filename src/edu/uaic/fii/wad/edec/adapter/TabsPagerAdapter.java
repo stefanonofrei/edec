@@ -40,7 +40,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             } else if (fragment == 1) {
                 mFragmentManager.beginTransaction().remove(mFragmentAtPos1).commit();
 
-                if (mFragmentAtPos1 instanceof GroupsFragment) {
+                if (mFragmentAtPos1 instanceof GroupsFragment ) {
                     if (id == 1) {
                         mFragmentAtPos1 = new GroupDetailsFragment(listener);
                     } else if (id == 2) {
@@ -48,7 +48,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                     }
 
                     onDetailsSearchFragment = true;
-                } else {
+                } else if (mFragmentAtPos1 instanceof SearchFragment) {
+                    mFragmentAtPos1 = new GroupDetailsFragment(listener);
+                }
+                  else {
                     mFragmentAtPos1 = new GroupsFragment(listener);
                     onDetailsSearchFragment = false;
                 }
