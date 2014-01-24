@@ -11,7 +11,7 @@ public final class Reasons {
                     reasonURL += "1";
                 } else if (reasonId == 1) {
                     reasonURL += "3";
-                } else {
+                } else if (reasonId == 2) {
                     reasonURL += "2";
                 }
                 break;
@@ -22,7 +22,7 @@ public final class Reasons {
                     reasonURL += "7";
                 } else if (reasonId == 1) {
                     reasonURL += "8";
-                } else {
+                } else if (reasonId == 2) {
                     reasonURL += "9";
                 }
                 break;
@@ -33,7 +33,7 @@ public final class Reasons {
                     reasonURL += "4";
                 } else if (reasonId == 1) {
                     reasonURL += "5";
-                } else {
+                } else if (reasonId == 2) {
                     reasonURL += "6";
                 }
                 break;
@@ -53,7 +53,7 @@ public final class Reasons {
                     reasonId = 0;
                 } else if (reasonIdToken == 3) {
                     reasonId = 1;
-                } else {
+                } else if (reasonIdToken == 2) {
                     reasonId = 2;
                 }
                 break;
@@ -64,7 +64,7 @@ public final class Reasons {
                     reasonId = 0;
                 } else if (reasonIdToken == 8) {
                     reasonId = 1;
-                } else {
+                } else if (reasonIdToken == 9) {
                     reasonId = 2;
                 }
                 break;
@@ -75,7 +75,7 @@ public final class Reasons {
                     reasonId = 0;
                 } else if (reasonIdToken == 5) {
                     reasonId = 1;
-                } else {
+                } else if (reasonIdToken == 6) {
                     reasonId = 2;
                 }
                 break;

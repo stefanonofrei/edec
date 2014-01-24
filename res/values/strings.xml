@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">edec</string>
-    <string name="rule_prompt">Select ruleView type</string>
+    <string name="rule_prompt">Select rule type</string>
     <string name="reason_prompt">Select reason</string>
     <string name="add_new_group">@drawable/plus</string>
     <string name="my_groups">My Groups</string>
@@ -47,8 +47,8 @@
 
     <string-array name="rule_items">
         <item>Company</item>
-        <item>Ingredient</item>
         <item>Product</item>
+        <item>Ingredient</item>
     </string-array>
 
     <string-array name="trending_groups">

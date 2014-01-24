@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -65,6 +64,7 @@ public class GroupDetailsFragment extends Fragment {
     private int ruleReasonIndex;
     public static int parent;
     public static boolean fromSearch;
+    private boolean viewDetails;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
         pageListener = listener;
@@ -77,6 +77,7 @@ public class GroupDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.group_details_fragment, container, false);
 
         ruleIndex = 0;
+        viewDetails = false;
 
         groupLogo = (ImageView) view.findViewById(R.id.add_group_logo);
         this.groupName = (EditText) view.findViewById(R.id.add_group_name);
@@ -94,21 +95,14 @@ public class GroupDetailsFragment extends Fragment {
 
         this.ruleReason = (Spinner) view.findViewById(R.id.add_group_rule_reason);
 
+        setReasonsAdapter(0);
+
         this.ruleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ArrayAdapter adapter;
-                if (i == 0) {
-                    adapter = ArrayAdapter.createFromResource(getActivity(), R.array.companies_reasons, R.layout.spinner_item);
-                } else if (i == 1) {
-                    adapter = ArrayAdapter.createFromResource(getActivity(), R.array.ingredients_reasons, R.layout.spinner_item);
-                } else {
-                    adapter = ArrayAdapter.createFromResource(getActivity(), R.array.products_reasons, R.layout.spinner_item);
-                }
 
-                if (adapter != null) {
-                    adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-                    ruleReason.setAdapter(adapter);
+                if (!viewDetails) {
+                    setReasonsAdapter(i);
                 }
             }
 
@@ -158,11 +152,11 @@ public class GroupDetailsFragment extends Fragment {
                         break;
                     }
                     case 1: {
-                        URL += "/ingredients/" + ruleNameString + "/search.json";
+                        URL += "/products/" + ruleNameString + "/search.json";
                         break;
                     }
                     case 2: {
-                        URL += "/products/" + ruleNameString + "/search.json";
+                        URL += "/ingredients/" + ruleNameString + "/search.json";
                         break;
                     }
                 }
@@ -250,9 +244,9 @@ public class GroupDetailsFragment extends Fragment {
 
             if (MainActivity.currentGroup.getRules().size() > 0)  {
                 Rule r = MainActivity.currentGroup.getRules().get(0);
-                ruleType.setSelection(r.getType());
+                ruleType.setSelection(r.getType(), false);
                 ruleName.setText(r.getName());
-                ruleReason.setSelection(r.getReason());
+                ruleReason.setSelection(r.getReason(), false);
             }
 
             if (MainActivity.groupState == 2) {
@@ -260,6 +254,8 @@ public class GroupDetailsFragment extends Fragment {
             } else {
                 leaveGroup.setVisibility(View.VISIBLE);
             }
+        } else {
+            parent = 1;
         }
 
         return view;
@@ -284,6 +280,21 @@ public class GroupDetailsFragment extends Fragment {
         fromSearch = false;
     }
 
+    private void setReasonsAdapter(int i) {
+        ArrayAdapter adapter;
+        if (i == 0) {
+            adapter = ArrayAdapter.createFromResource(getActivity(), R.array.companies_reasons, R.layout.spinner_item);
+        } else if (i == 1) {
+            adapter = ArrayAdapter.createFromResource(getActivity(), R.array.products_reasons, R.layout.spinner_item);
+        } else {
+            adapter = ArrayAdapter.createFromResource(getActivity(), R.array.ingredients_reasons, R.layout.spinner_item);
+        }
+
+        if (adapter != null) {
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+            ruleReason.setAdapter(adapter);
+        }
+    }
 
     public void setGroupInfo() {
         ruleIndex = 0;
@@ -312,7 +323,6 @@ public class GroupDetailsFragment extends Fragment {
 
         if (!currentItemId.equals("")) {
             rule = new Rule(ruleTypeIndex, ruleNameString, ruleReasonIndex, currentItemId);
-            //Toast.makeText(getActivity().getApplicationContext(), currentItemId, Toast.LENGTH_LONG).show();
 
             if (MainActivity.currentGroup.getRules().contains(rule)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -364,9 +374,9 @@ public class GroupDetailsFragment extends Fragment {
         ruleView.setLayoutParams(this.rulesLayoutParams);
         rulesLayout.addView(ruleView);
 
-        this.ruleType.setSelection(0);
+        this.ruleType.setSelection(0, false);
         this.ruleName.setText("");
-        this.ruleReason.setSelection(0);
+        this.ruleReason.setSelection(0, false);
 
         if (MainActivity.groupState < 2) {
             ruleView.setOnClickListener(new RuleOnClickListener(ruleIndex, ruleView) {
@@ -384,11 +394,13 @@ public class GroupDetailsFragment extends Fragment {
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
                             if (item == 0) {
-                                ruleType.setSelection(MainActivity.currentGroup.getRule(ruleIndex).getType());
+                                viewDetails = true;
+                                ruleType.setSelection(MainActivity.currentGroup.getRule(ruleIndex).getType(), false);
                                 ruleType.setEnabled(false);
                                 ruleName.setText(MainActivity.currentGroup.getRule(ruleIndex).getName());
                                 ruleName.setEnabled(false);
-                                ruleReason.setSelection(MainActivity.currentGroup.getRule(ruleIndex).getReason());
+                                setReasonsAdapter(MainActivity.currentGroup.getRule(ruleIndex).getType());
+                                ruleReason.setSelection(MainActivity.currentGroup.getRule(ruleIndex).getReason(), false);
 
                                 displayButtons(1);
 
@@ -414,12 +426,13 @@ public class GroupDetailsFragment extends Fragment {
                                                 rule.setBackgroundResource(R.drawable.ingredient_rule_header);
                                             }
 
-                                            ruleType.setSelection(0);
+                                            ruleType.setSelection(0, false);
                                             ruleType.setEnabled(true);
                                             ruleName.setText("");
                                             ruleName.setEnabled(true);
-                                            ruleReason.setSelection(0);
+                                            ruleReason.setSelection(0, false);
 
+                                            viewDetails = false;
                                             displayButtons(2);
                                         }
                                     }
@@ -433,9 +446,11 @@ public class GroupDetailsFragment extends Fragment {
                                 MainActivity.currentGroup.setDescription(groupDescription.getText().toString());
                                 setGroupInfo();
 
-                                ruleType.setSelection(0);
+                                ruleType.setSelection(0, false);
+                                ruleType.setEnabled(true);
                                 ruleName.setText("");
-                                ruleReason.setSelection(0);
+                                ruleName.setEnabled(true);
+                                ruleReason.setSelection(0, false);
 
                                 displayButtons(2);
                             }
@@ -450,11 +465,12 @@ public class GroupDetailsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     final int ruleIndex = this.ruleIndex;
-
+                    viewDetails = true;
                     Rule r = MainActivity.currentGroup.getRules().get(ruleIndex);
-                    ruleType.setSelection(r.getType());
+                    ruleType.setSelection(r.getType(), false);
                     ruleName.setText(r.getName());
-                    ruleReason.setSelection(r.getReason());
+                    setReasonsAdapter(MainActivity.currentGroup.getRule(ruleIndex).getType());
+                    ruleReason.setSelection(r.getReason(), false);
                 }
             });
         }

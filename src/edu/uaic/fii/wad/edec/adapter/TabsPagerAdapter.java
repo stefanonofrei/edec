@@ -28,6 +28,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                         mFragmentAtPos0 = new OkProductFragment(listener);
                     } else if (id == 2) {
                         mFragmentAtPos0 = new BadProductFragment(listener);
+                    } else if (id == 3) {
+                        mFragmentAtPos0 = new ScanProductFragment(listener);
                     }
 
                     onResultFragment = true;
@@ -120,6 +122,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return POSITION_NONE;
         }
         if (object instanceof BadProductFragment && mFragmentAtPos0 instanceof ScanProductFragment) {
+            return POSITION_NONE;
+        }
+        if (object instanceof ScanProductFragment && mFragmentAtPos0 instanceof ScanProductFragment) {
             return POSITION_NONE;
         }
 

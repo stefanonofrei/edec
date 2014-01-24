@@ -1,28 +1,19 @@
 package edu.uaic.fii.wad.edec.fragment;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.adapter.GridViewAdapter;
-import edu.uaic.fii.wad.edec.adapter.TabsPagerAdapter;
 import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.model.GridItem;
 import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.service.group.GroupDetails;
-import edu.uaic.fii.wad.edec.service.group.SearchGroup;
-import edu.uaic.fii.wad.edec.service.stats.TopCompanies;
-import edu.uaic.fii.wad.edec.service.stats.TopIngredients;
-import edu.uaic.fii.wad.edec.service.stats.TopProducts;
-import edu.uaic.fii.wad.edec.service.stats.TrendingGroups;
 import edu.uaic.fii.wad.edec.service.util.ImageBase64;
 import edu.uaic.fii.wad.edec.view.ExpandableHeightGridView;
 
@@ -31,7 +22,6 @@ import java.util.ArrayList;
 public class SearchFragment extends Fragment {
 
     public static PageFragmentListener pageListener;
-    private static View view;
     public static ArrayList<Group> groupList;
 
     public static ArrayList<GridItem> imageItems = new ArrayList<GridItem>();
@@ -43,7 +33,7 @@ public class SearchFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.search_fragment, container, false);
+        View view = inflater.inflate(R.layout.search_fragment, container, false);
 
         ExpandableHeightGridView groupsGridView = (ExpandableHeightGridView) view.findViewById(R.id.search_groups_grid);
         customGridAdapter = new GridViewAdapter(view.getContext(), R.layout.grid_item, imageItems);

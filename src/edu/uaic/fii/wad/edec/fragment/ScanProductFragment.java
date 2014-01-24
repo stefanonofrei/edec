@@ -132,7 +132,7 @@ public class ScanProductFragment extends Fragment {
                     SymbolSet syms = scanner.getResults();
                     for (Symbol sym : syms) {
                         Toast.makeText(getActivity().getApplicationContext(),
-                               "Scan Result: " + sym.getData(), Toast.LENGTH_LONG).show();
+                               "Scan Result: " + sym.getData(), Toast.LENGTH_SHORT).show();
 
                         new ProductInfo(sym.getData()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -145,7 +145,7 @@ public class ScanProductFragment extends Fragment {
 
     private static Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
-            autoFocusHandler.postDelayed(doAutoFocus, 100);
+            autoFocusHandler.postDelayed(doAutoFocus, 1000);
         }
     };
 

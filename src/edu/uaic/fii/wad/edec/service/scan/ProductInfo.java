@@ -1,6 +1,7 @@
 package edu.uaic.fii.wad.edec.service.scan;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.fragment.ScanProductFragment;
 import edu.uaic.fii.wad.edec.model.Product;
@@ -13,9 +14,11 @@ import org.json.JSONObject;
 public class ProductInfo extends AsyncTask<Void, Void, Void> {
 
     private String id;
+    private boolean exists;
 
     public ProductInfo(String id) {
         this.id = id;
+        this.exists = true;
     }
 
     @Override
@@ -23,14 +26,17 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
         ServiceHandler serviceHandler = new ServiceHandler();
         String jsonStr = serviceHandler.makeServiceCall(URLs.scanURL + id + ".json", ServiceHandler.GET);
 
-        MainActivity.tasksNumber = 2;
-        new ProductLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
         if (jsonStr != null) {
             try {
                 JSONObject product = new JSONObject(jsonStr);
 
                 String name = product.getString("name");
+
+                if (name.equals("null")) {
+                    this.exists = false;
+                    return null;
+                }
+
                 String image = product.getString("image");
                 JSONArray ingredients = product.getJSONArray("ingredients");
 
@@ -41,6 +47,9 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
 
                 JSONObject company = product.getJSONObject("company");
                 String id = company.getString("id");
+
+                MainActivity.tasksNumber = 2;
+                new ProductLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 new CompanyInfo(id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -64,9 +73,15 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        MainActivity.tasksNumber++;
-        MainActivity.completedTasks.incrementAndGet();
-        new ProductVerdict(this.id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if (this.exists) {
+            MainActivity.tasksNumber++;
+            MainActivity.completedTasks.incrementAndGet();
+            new ProductVerdict(this.id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            MainActivity.loading.dismiss();
+            ScanProductFragment.scanPageListener.onSwitchToNextFragment(0, 3);
+            Toast.makeText(MainActivity.activity.getApplicationContext(), "Product does not exist", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

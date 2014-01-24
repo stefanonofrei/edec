@@ -1,6 +1,7 @@
 package edu.uaic.fii.wad.edec.activity;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -54,18 +55,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public static int tasksNumber = -1;
     public static AtomicInteger completedTasks;
     public static boolean loadAllGroups;
+    public static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        activity = this;
         completedTasks = new AtomicInteger(0);
         loadAllGroups = true;
 
         loading = new ProgressDialog(this);
         loading.setTitle("Loading");
         loading.setMessage("Please wait...");
+        loading.setCancelable(false);
 
         currentGroup = new Group();
 
