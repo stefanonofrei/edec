@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -63,6 +64,7 @@ public class GroupDetailsFragment extends Fragment {
     private String ruleNameString;
     private int ruleReasonIndex;
     public static int parent;
+    public static boolean fromSearch;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
         pageListener = listener;
@@ -273,8 +275,13 @@ public class GroupDetailsFragment extends Fragment {
     }
 
     public void backPressed() {
-        pageListener.onSwitchToNextFragment(parent, 0);
+        if (fromSearch) {
+            pageListener.onSwitchToNextFragment(1, 1);
+        } else {
+            pageListener.onSwitchToNextFragment(parent, 0);
+        }
         ruleIndex = 0;
+        fromSearch = false;
     }
 
 
@@ -470,18 +477,21 @@ public class GroupDetailsFragment extends Fragment {
 
         new SaveGroup().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        fromSearch = false;
         GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
     }
 
     public void joinGroup() {
         new GroupMigration(MainActivity.currentGroup.getId(), "/join").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        fromSearch = false;
         GroupsFragment.pageListener.onSwitchToNextFragment(parent, 0);
     }
 
     public void leaveGroup() {
         new GroupMigration(MainActivity.currentGroup.getId(), "/leave").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        fromSearch = false;
         GroupsFragment.pageListener.onSwitchToNextFragment(parent, 0);
     }
 
@@ -500,6 +510,7 @@ public class GroupDetailsFragment extends Fragment {
 
         new EditGroup().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        fromSearch = false;
         GroupsFragment.pageListener.onSwitchToNextFragment(1, 0);
 
     }

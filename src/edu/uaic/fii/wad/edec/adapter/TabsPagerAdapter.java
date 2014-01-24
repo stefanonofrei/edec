@@ -15,7 +15,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public Fragment mFragmentAtPos2;
     private PageListener listener = new PageListener();
     public static boolean onResultFragment = false;
-    public static boolean onDetailsSearchFragment = false;
 
     private final class PageListener implements PageFragmentListener {
 
@@ -40,20 +39,24 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             } else if (fragment == 1) {
                 mFragmentManager.beginTransaction().remove(mFragmentAtPos1).commit();
 
-                if (mFragmentAtPos1 instanceof GroupsFragment ) {
+                if (mFragmentAtPos1 instanceof GroupsFragment) {
                     if (id == 1) {
                         mFragmentAtPos1 = new GroupDetailsFragment(listener);
                     } else if (id == 2) {
                         mFragmentAtPos1 = new SearchFragment(listener);
                     }
-
-                    onDetailsSearchFragment = true;
                 } else if (mFragmentAtPos1 instanceof SearchFragment) {
-                    mFragmentAtPos1 = new GroupDetailsFragment(listener);
-                }
-                  else {
-                    mFragmentAtPos1 = new GroupsFragment(listener);
-                    onDetailsSearchFragment = false;
+                    if (id == 0) {
+                        mFragmentAtPos1 = new GroupsFragment(listener);
+                    } else if (id == 1) {
+                        mFragmentAtPos1 = new GroupDetailsFragment(listener);
+                    }
+                } else if (mFragmentAtPos1 instanceof GroupDetailsFragment) {
+                    if (id == 1) {
+                        mFragmentAtPos1 = new SearchFragment(listener);
+                    } else {
+                        mFragmentAtPos1 = new GroupsFragment(listener);
+                    }
                 }
             } else if (fragment == 2) {
                 mFragmentManager.beginTransaction().remove(mFragmentAtPos2).commit();
@@ -130,6 +133,12 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             return POSITION_NONE;
         }
         if (object instanceof SearchFragment && mFragmentAtPos1 instanceof GroupsFragment) {
+            return POSITION_NONE;
+        }
+        if (object instanceof SearchFragment && mFragmentAtPos1 instanceof GroupDetailsFragment) {
+            return POSITION_NONE;
+        }
+        if (object instanceof GroupDetailsFragment && mFragmentAtPos1 instanceof SearchFragment) {
             return POSITION_NONE;
         }
 

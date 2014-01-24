@@ -111,7 +111,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         });
 
         loadGroups();
-
     }
 
     @Override
@@ -181,10 +180,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         MainActivity.tasksNumber = 4;
         new GroupsLoadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        new MyGroupsListing().execute();
-        new JoinedGroupsListing().execute();
-        new RecommendedGroupsListing().execute();
-        new FriendsGroupsListing().execute();
+        new MyGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new JoinedGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new RecommendedGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new FriendsGroupsListing().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private static class GroupsLoadTask extends AsyncTask<Void, Void, Void> {

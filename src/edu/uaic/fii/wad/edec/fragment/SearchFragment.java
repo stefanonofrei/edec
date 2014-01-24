@@ -34,9 +34,8 @@ public class SearchFragment extends Fragment {
     private static View view;
     public static ArrayList<Group> groupList;
 
-    private ArrayList<GridItem> imageItems = new ArrayList<GridItem>();
-    private ProgressDialog barProgressDialog;
-    private GridViewAdapter customGridAdapter;
+    public static ArrayList<GridItem> imageItems = new ArrayList<GridItem>();
+    public static GridViewAdapter customGridAdapter;
 
     public SearchFragment(PageFragmentListener listener) {
         pageListener = listener;
@@ -55,37 +54,21 @@ public class SearchFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MainActivity.groupState = setGroupUserAssociation(groupList.get(i).getId());
+                GroupDetailsFragment.fromSearch = true;
                 new GroupDetails(groupList.get(i).getId(), 1).execute();
             }
         });
 
-        Toast.makeText(view.getContext(), "Search query: " + GroupsFragment.searchQuery, Toast.LENGTH_LONG).show();
+        //Toast.makeText(view.getContext(), "Search query: " + GroupsFragment.searchQuery, Toast.LENGTH_LONG).show();
 
         return view;
     }
 
     public void backPressed() {
-        TabsPagerAdapter.onDetailsSearchFragment = false;
         pageListener.onSwitchToNextFragment(1, 0);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser) {
-                barProgressDialog = new ProgressDialog(getActivity());
-                barProgressDialog.setTitle("Loading");
-                barProgressDialog.setMessage("Please wait...");
-                barProgressDialog.setProgress(0);
-                barProgressDialog.setMax(20);
-                barProgressDialog.show();
-
-                new SearchGroup(this,GroupsFragment.searchQuery).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        }
-    }
-
-    public void refreshGroupData(){
+    public static void refreshGroupData(){
         ArrayList<GridItem> newImages = new ArrayList<GridItem>();
         for(int i = 0; i < groupList.size(); i++){
 
@@ -95,7 +78,6 @@ public class SearchFragment extends Fragment {
         imageItems.clear();
         imageItems.addAll(newImages);
         customGridAdapter.notifyDataSetChanged();
-        barProgressDialog.dismiss();
     }
 
     public int setGroupUserAssociation(String id){

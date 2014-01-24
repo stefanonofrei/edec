@@ -1,6 +1,7 @@
 package edu.uaic.fii.wad.edec.service.group;
 
 import android.os.AsyncTask;
+import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.fragment.GroupsFragment;
 import edu.uaic.fii.wad.edec.fragment.SearchFragment;
 import edu.uaic.fii.wad.edec.fragment.StatisticsFragment;
@@ -25,10 +26,8 @@ public class SearchGroup extends AsyncTask<Void, Void, Void> {
 
     private ArrayList<Group> searchResults = new ArrayList<Group>();
     private String searchInput;
-    private SearchFragment fragment;
 
-    public SearchGroup(SearchFragment frag, String input){
-        fragment = frag;
+    public SearchGroup(String input) {
         this.searchInput = input;
     }
 
@@ -62,13 +61,14 @@ public class SearchGroup extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         SearchFragment.groupList = searchResults;
-        fragment.refreshGroupData();
-
+        SearchFragment.refreshGroupData();
+        MainActivity.loading.dismiss();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        MainActivity.loading.show();
     }
 
     private void addGroupInfo(String id){

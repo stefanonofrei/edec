@@ -2,6 +2,7 @@ package edu.uaic.fii.wad.edec.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.*;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
@@ -19,6 +22,7 @@ import edu.uaic.fii.wad.edec.listener.ScrollViewListener;
 import edu.uaic.fii.wad.edec.model.GridItem;
 import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.service.group.DeleteGroup;
+import edu.uaic.fii.wad.edec.service.group.SearchGroup;
 import edu.uaic.fii.wad.edec.view.ExpandableHeightGridView;
 import edu.uaic.fii.wad.edec.service.group.GroupDetails;
 import edu.uaic.fii.wad.edec.view.ObservableScrollView;
@@ -76,10 +80,13 @@ public class GroupsFragment extends Fragment implements ScrollViewListener {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
                 searchEditText = (EditText) GroupsFragment.view.findViewById(R.id.view_group_search);
                 searchQuery = searchEditText.getText().toString();
 
-                //TODO search request
+                new SearchGroup(searchQuery).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 pageListener.onSwitchToNextFragment(1, 2);
             }

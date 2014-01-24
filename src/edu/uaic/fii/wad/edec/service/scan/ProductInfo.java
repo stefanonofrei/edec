@@ -1,7 +1,6 @@
 package edu.uaic.fii.wad.edec.service.scan;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.fragment.ScanProductFragment;
 import edu.uaic.fii.wad.edec.model.Product;
