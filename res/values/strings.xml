@@ -72,20 +72,23 @@
     </string-array>
 
     <string-array name="companies_reasons">
-        <item>Causes cancer</item>
-        <item>Unwanted ingredients</item>
+        <item>No Eco Friendly Principles</item>
+        <item>Gender Inequality</item>
         <item>Irresponsible marketing</item>
+        <item>Race Inequality</item>
     </string-array>
 
     <string-array name="products_reasons">
         <item>Bad for health</item>
-        <item>Genetic engineering</item>
-        <item>Justin Beiber</item>
+        <item>Animal testing</item>
+        <item>Calories</item>
+        <item>Unethical production</item>
     </string-array>
 
     <string-array name="ingredients_reasons">
         <item>Allergies</item>
         <item>Intolerance</item>
         <item>Health issues (Diabetes)</item>
+        <item>Genetic Modification</item>
     </string-array>
 </resources>

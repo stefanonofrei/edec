@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.*;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
@@ -27,6 +28,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +36,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GroupDetailsFragment extends Fragment {
 
@@ -93,6 +98,35 @@ public class GroupDetailsFragment extends Fragment {
 
         this.ruleName = (EditText) view.findViewById(R.id.add_group_rule_name);
 
+        this.ruleName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    ruleTypeIndex = ruleType.getSelectedItemPosition();
+                    ruleNameString = ruleName.getText().toString();
+
+                    String URL = URLs.baseURL;
+
+                    switch (ruleTypeIndex) {
+                        case 0: {
+                            URL += "/companies/" + ruleNameString + "/search.json";
+                            break;
+                        }
+                        case 1: {
+                            URL += "/products/" + ruleNameString + "/search.json";
+                            break;
+                        }
+                        case 2: {
+                            URL += "/ingredients/" + ruleNameString + "/search.json";
+                            break;
+                        }
+                    }
+
+                    new SearchItem(URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                return false;
+            }
+        });
         this.ruleReason = (Spinner) view.findViewById(R.id.add_group_rule_reason);
 
         setReasonsAdapter(0);
@@ -100,8 +134,8 @@ public class GroupDetailsFragment extends Fragment {
         this.ruleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 if (!viewDetails) {
+                    currentItemId = "";
                     setReasonsAdapter(i);
                 }
             }
@@ -111,8 +145,6 @@ public class GroupDetailsFragment extends Fragment {
                 // ...
             }
         });
-
-
 
         rulesLayout = (LinearLayout) view.findViewById(R.id.add_group_existing_rules_list);
 
@@ -140,28 +172,7 @@ public class GroupDetailsFragment extends Fragment {
         addRule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ruleTypeIndex = ruleType.getSelectedItemPosition();
-                ruleNameString = ruleName.getText().toString();
-                ruleReasonIndex = ruleReason.getSelectedItemPosition();
-
-                String URL = URLs.baseURL;
-
-                switch (ruleTypeIndex) {
-                    case 0: {
-                        URL += "/companies/" + ruleNameString + "/search.json";
-                        break;
-                    }
-                    case 1: {
-                        URL += "/products/" + ruleNameString + "/search.json";
-                        break;
-                    }
-                    case 2: {
-                        URL += "/ingredients/" + ruleNameString + "/search.json";
-                        break;
-                    }
-                }
-
-                new SearchItem(URL).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                addRule();
             }
         });
 
@@ -320,6 +331,7 @@ public class GroupDetailsFragment extends Fragment {
 
     public void addRule() {
         Rule rule;
+        ruleReasonIndex = ruleReason.getSelectedItemPosition();
 
         if (!currentItemId.equals("")) {
             rule = new Rule(ruleTypeIndex, ruleNameString, ruleReasonIndex, currentItemId);
@@ -589,9 +601,11 @@ public class GroupDetailsFragment extends Fragment {
     private class SearchItem extends AsyncTask<Void, Void, Void> {
 
         private String URL;
+        private ArrayList<BasicNameValuePair> searchResults = new ArrayList<BasicNameValuePair>();
 
         public SearchItem(String URL) {
             this.URL = URL;
+            this.searchResults = new ArrayList<BasicNameValuePair>();
         }
 
         @Override
@@ -620,11 +634,12 @@ public class GroupDetailsFragment extends Fragment {
                 try {
                     JSONArray items = new JSONArray(jsonStr);
 
-                    if (items.length() > 0) {
-                        JSONObject searchResult = items.getJSONObject(0);
-                        currentItemId = searchResult.getString("id");
+                    for (int i = 0; i < items.length(); i++) {
 
-                        httpGet = new HttpGet(URLs.baseURL + currentItemId + ".json");
+                        JSONObject searchResult = items.getJSONObject(i);
+                        String id = searchResult.getString("id");
+
+                        httpGet = new HttpGet(URLs.baseURL + id + ".json");
 
                         httpGet.setHeader("Authorization", Token.CURRENT);
 
@@ -641,10 +656,10 @@ public class GroupDetailsFragment extends Fragment {
 
                         if (jsonStr != null) {
                             JSONObject item = new JSONObject(jsonStr);
-                            ruleNameString = item.getString("name");
+                            String ruleName = item.getString("name");
+
+                            searchResults.add(new BasicNameValuePair(id, ruleName));
                         }
-                    }  else {
-                        currentItemId = "";
                     }
                 } catch (JSONException ex) {
                     System.out.println(ex.getMessage());
@@ -657,13 +672,40 @@ public class GroupDetailsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            MainActivity.loading.show();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            addRule();
+            if (searchResults.size() > 1) {
+                CharSequence[] items = new CharSequence[searchResults.size()];
+
+                for (int i = 0; i < searchResults.size(); i++) {
+                    items[i] = searchResults.get(i).getValue();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Please select an item");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        currentItemId = searchResults.get(i).getName();
+                        ruleNameString = searchResults.get(i).getValue();
+                        ruleName.setText(ruleNameString);
+                    }
+                });
+                builder.show();
+            } else if (searchResults.size() == 1) {
+                currentItemId = searchResults.get(0).getName();
+                ruleNameString = searchResults.get(0).getValue();
+                ruleName.setText(ruleNameString);
+            } else {
+                currentItemId = "";
+            }
+
+            MainActivity.loading.dismiss();
         }
     }
 }
