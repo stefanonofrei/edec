@@ -49,7 +49,7 @@ public class SignInActivity extends Activity implements View.OnClickListener, Go
                 .setOnClickListener(this);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Hold your shit...");
+        progressDialog.setMessage("Please wait...");
     }
 
     @Override
