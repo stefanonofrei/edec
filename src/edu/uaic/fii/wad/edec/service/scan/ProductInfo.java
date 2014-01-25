@@ -74,8 +74,9 @@ public class ProductInfo extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
 
         if (this.exists) {
-            MainActivity.tasksNumber++;
+            MainActivity.tasksNumber += 2;
             MainActivity.completedTasks.incrementAndGet();
+            new SimilarProducts(this.id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             new ProductVerdict(this.id).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             MainActivity.loading.dismiss();

@@ -20,6 +20,9 @@ public class BadProductFragment extends Fragment {
     public static PageFragmentListener scanPageListener;
     private LinearLayout reasonsLayout;
     private LinearLayout ingredientsLayout;
+    private int currentRecommended;
+    private ImageView recommendedLogo;
+    private TextView recommendedName;
 
     public BadProductFragment(PageFragmentListener listener) {
         scanPageListener = listener;
@@ -130,6 +133,52 @@ public class BadProductFragment extends Fragment {
                 } else {
                     reasonsLayout.setVisibility(LinearLayout.VISIBLE);
                 }
+            }
+        });
+
+        currentRecommended = 0;
+        decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
+        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+
+        recommendedLogo = (ImageView) getActivity().findViewById(R.id.bad_recommended_logo);
+        recommendedLogo.setImageBitmap(decodedByte);
+        recommendedName = (TextView) getActivity().findViewById(R.id.bad_recommended_name);
+        recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
+
+        ImageView leftRecommended = (ImageView) getActivity().findViewById(R.id.bad_recommended_left);
+
+        leftRecommended.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentRecommended--;
+
+                if (currentRecommended < 0) {
+                    currentRecommended = MainActivity.currentProduct.getRecommended().size() - 1;
+                }
+
+                byte[] decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                recommendedLogo.setImageBitmap(decodedByte);
+                recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
+            }
+        });
+
+        ImageView rightRecommended = (ImageView) getActivity().findViewById(R.id.bad_recommended_right);
+
+        rightRecommended.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentRecommended++;
+
+                if (currentRecommended == MainActivity.currentProduct.getRecommended().size()) {
+                    currentRecommended = 0;
+                }
+
+                byte[] decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                recommendedLogo.setImageBitmap(decodedByte);
+                recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
             }
         });
     }

@@ -113,4 +113,12 @@ public class Product {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void addRecommended(Product product) {
+        this.recommended.add(product);
+    }
+
+    public Product getRecommended(int i) {
+        return this.recommended.get(i);
+    }
 }

@@ -175,20 +175,35 @@
                     android:contentDescription="@string/left_arrow"
                     android:layout_weight="1"/>
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                          android:layout_width="150dp"
-                          android:layout_height="wrap_content"
-                          android:orientation="vertical"
+            <RelativeLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/header_color"
+                    android:id="@+id/bad_recommended_logo_name_layout">
 
-                          android:layout_marginBottom="6dp"
-                          android:background="@drawable/header_color">
+                <ImageView
+                        android:id="@+id/bad_recommended_logo_background"
+                        android:contentDescription="@string/item_image"
+                        android:layout_below="@id/bad_recommended_logo_name_layout"
+                        android:layout_gravity="center"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp" >
+                </ImageView>
 
                 <ImageView
                         android:id="@+id/bad_recommended_logo"
                         android:contentDescription="@string/item_image"
+                        android:layout_below="@id/bad_recommended_logo_name_layout"
+                        android:background="@android:color/white"
                         android:paddingLeft="5dp"
                         android:paddingTop="5dp"
                         android:paddingRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="5dp"
                         android:layout_gravity="center"
                         android:layout_width="150dp"
                         android:layout_height="150dp" >
@@ -198,12 +213,13 @@
                         android:id="@+id/bad_recommended_name"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/bad_recommended_logo"
                         android:gravity="center"
                         android:padding="2dp"
                         android:textSize="@dimen/header_text" >
                 </TextView>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <ImageView
                     android:layout_width="75dp"
