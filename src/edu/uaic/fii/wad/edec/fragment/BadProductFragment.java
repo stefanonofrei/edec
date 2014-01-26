@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.TypedValue;
 import android.view.*;
 import android.widget.*;
 import edu.uaic.fii.wad.edec.R;
@@ -49,6 +50,9 @@ public class BadProductFragment extends Fragment {
 
     public void setProductInfo() {
         TextView productName = (TextView) getActivity().findViewById(R.id.bad_product_name);
+        if (MainActivity.currentProduct.getName().length() > 15) {
+            productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        }
         productName.setText(MainActivity.currentProduct.getName());
 
         byte[] decodedString = Base64.decode(MainActivity.currentProduct.getImage(), Base64.DEFAULT);
@@ -90,17 +94,6 @@ public class BadProductFragment extends Fragment {
 
         TextView ingredients = (TextView) getActivity().findViewById(R.id.bad_ingredients);
 
-        ingredients.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ingredientsLayout.getVisibility() == View.VISIBLE) {
-                    ingredientsLayout.setVisibility(LinearLayout.GONE);
-                } else {
-                    ingredientsLayout.setVisibility(LinearLayout.VISIBLE);
-                }
-            }
-        });
-
         reasonsLayout = (LinearLayout) getActivity().findViewById(R.id.bad_reasons_list);
 
         LinearLayout.LayoutParams reasonsLayoutParams = new LinearLayout.LayoutParams(
@@ -136,50 +129,88 @@ public class BadProductFragment extends Fragment {
             }
         });
 
-        currentRecommended = 0;
-        decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
-        decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        if (MainActivity.currentProduct.getRecommended().size() > 0) {
+            currentRecommended = 0;
+            decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
 
-        recommendedLogo = (ImageView) getActivity().findViewById(R.id.bad_recommended_logo);
-        recommendedLogo.setImageBitmap(decodedByte);
-        recommendedName = (TextView) getActivity().findViewById(R.id.bad_recommended_name);
-        recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
+            recommendedLogo = (ImageView) getActivity().findViewById(R.id.bad_recommended_logo);
+            recommendedLogo.setImageBitmap(decodedByte);
+            recommendedName = (TextView) getActivity().findViewById(R.id.bad_recommended_name);
+            recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
 
-        ImageView leftRecommended = (ImageView) getActivity().findViewById(R.id.bad_recommended_left);
+            ImageView leftRecommended = (ImageView) getActivity().findViewById(R.id.bad_recommended_left);
 
-        leftRecommended.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentRecommended--;
+            leftRecommended.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentRecommended--;
 
-                if (currentRecommended < 0) {
-                    currentRecommended = MainActivity.currentProduct.getRecommended().size() - 1;
+                    if (currentRecommended < 0) {
+                        currentRecommended = MainActivity.currentProduct.getRecommended().size() - 1;
+                    }
+
+                    byte[] decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    recommendedLogo.setImageBitmap(decodedByte);
+                    recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
                 }
+            });
 
-                byte[] decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                recommendedLogo.setImageBitmap(decodedByte);
-                recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
-            }
-        });
+            ImageView rightRecommended = (ImageView) getActivity().findViewById(R.id.bad_recommended_right);
 
-        ImageView rightRecommended = (ImageView) getActivity().findViewById(R.id.bad_recommended_right);
+            rightRecommended.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentRecommended++;
 
-        rightRecommended.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentRecommended++;
+                    if (currentRecommended == MainActivity.currentProduct.getRecommended().size()) {
+                        currentRecommended = 0;
+                    }
 
-                if (currentRecommended == MainActivity.currentProduct.getRecommended().size()) {
-                    currentRecommended = 0;
+                    byte[] decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    recommendedLogo.setImageBitmap(decodedByte);
+                    recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
                 }
+            });
 
-                byte[] decodedString = Base64.decode(MainActivity.currentProduct.getRecommended(currentRecommended).getImage(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                recommendedLogo.setImageBitmap(decodedByte);
-                recommendedName.setText(MainActivity.currentProduct.getRecommended(currentRecommended).getName());
-            }
-        });
+            ingredients.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ingredientsLayout.getVisibility() == View.VISIBLE) {
+                        ingredientsLayout.setVisibility(LinearLayout.GONE);
+                    } else {
+                        ingredientsLayout.setVisibility(LinearLayout.VISIBLE);
+                    }
+                }
+            });
+        }  else {
+            TextView recommendedHeader = (TextView) getActivity().findViewById(R.id.bad_recommended);
+            recommendedHeader.setVisibility(View.GONE);
+
+            LinearLayout layout = (LinearLayout) getActivity().findViewById(R.id.bad_recommended_list);
+            layout.setVisibility(LinearLayout.GONE);
+
+            ingredients.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ingredientsLayout.getVisibility() == View.VISIBLE) {
+                        ingredientsLayout.setVisibility(LinearLayout.GONE);
+                    } else {
+                        ingredientsLayout.setVisibility(LinearLayout.VISIBLE);
+
+                        final ScrollView scrollView = (ScrollView) getActivity().findViewById(R.id.bad_scroll);
+                        scrollView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 }

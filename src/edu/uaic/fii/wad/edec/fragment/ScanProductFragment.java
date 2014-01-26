@@ -13,8 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 import edu.uaic.fii.wad.edec.R;
-import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
+import edu.uaic.fii.wad.edec.activity.MainActivity;
 import edu.uaic.fii.wad.edec.camera.CameraPreview;
+import edu.uaic.fii.wad.edec.listener.PageFragmentListener;
 import edu.uaic.fii.wad.edec.service.scan.ProductInfo;
 import net.sourceforge.zbar.*;
 
@@ -40,13 +41,8 @@ public class ScanProductFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.scan_product_fragment, container, false);
 
-        return inflater.inflate(R.layout.scan_product_fragment, container, false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         autoFocusHandler = new Handler();
@@ -56,11 +52,11 @@ public class ScanProductFragment extends Fragment {
         scanner.setConfig(0, Config.X_DENSITY, 3);
         scanner.setConfig(0, Config.Y_DENSITY, 3);
 
-        mPreview = new CameraPreview(getActivity(), mCamera, previewCb, autoFocusCB);
-        FrameLayout preview = (FrameLayout) getActivity().findViewById(R.id.cameraPreview);
+        mPreview = new CameraPreview(MainActivity.activity, mCamera, previewCb, autoFocusCB);
+        FrameLayout preview = (FrameLayout) view.findViewById(R.id.cameraPreview);
         preview.addView(mPreview);
 
-        ImageView scanButton = (ImageView) getActivity().findViewById(R.id.scan_button);
+        ImageView scanButton = (ImageView) view.findViewById(R.id.scan_button);
 
         scanButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -73,6 +69,8 @@ public class ScanProductFragment extends Fragment {
                 }
             }
         });
+
+        return view;
     }
 
     public void onResume() {

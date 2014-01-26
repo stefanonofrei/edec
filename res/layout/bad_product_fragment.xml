@@ -40,8 +40,7 @@
                     android:padding="5dp"
                     android:layout_marginLeft="110dp"
                     android:layout_centerVertical="true"
-                    android:background="@android:color/white"
-                    android:src="@drawable/mockup_pepsi"/>
+                    android:background="@android:color/white"/>
 
             <ImageView
                     android:layout_width="100dp"
@@ -84,7 +83,6 @@
                 android:id="@+id/bad_company_logo"
                 android:layout_marginTop="12dp"
                 android:contentDescription="@string/company_logo"
-                android:src="@drawable/mockup_pepsico2"
                 android:layout_marginLeft="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
                 android:layout_below="@+id/bad_produced_by"

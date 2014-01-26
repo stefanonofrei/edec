@@ -70,6 +70,7 @@ public class GroupDetailsFragment extends Fragment {
     public static int parent;
     public static boolean fromSearch;
     private boolean viewDetails;
+    private static View view;
 
     public GroupDetailsFragment(PageFragmentListener listener) {
         pageListener = listener;
@@ -79,7 +80,7 @@ public class GroupDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.group_details_fragment, container, false);
+        view = inflater.inflate(R.layout.group_details_fragment, container, false);
 
         ruleIndex = 0;
         viewDetails = false;
@@ -279,6 +280,15 @@ public class GroupDetailsFragment extends Fragment {
         if (MainActivity.groupState == 0) {
             setGroupInfo();
         }
+
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if (MainActivity.loading.isShowing()) {
+                    MainActivity.loading.dismiss();
+                }
+            }
+        });
     }
 
     public void backPressed() {
@@ -339,12 +349,12 @@ public class GroupDetailsFragment extends Fragment {
             if (MainActivity.currentGroup.getRules().contains(rule)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Replace existing ruleView?")
-                       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 //TODO replace existing rule
                             }
                         })
-                       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // ..
                             }

@@ -2,10 +2,7 @@ package edu.uaic.fii.wad.edec.service.group;
 
 import android.os.AsyncTask;
 import edu.uaic.fii.wad.edec.activity.MainActivity;
-import edu.uaic.fii.wad.edec.fragment.GroupsFragment;
 import edu.uaic.fii.wad.edec.fragment.SearchFragment;
-import edu.uaic.fii.wad.edec.fragment.StatisticsFragment;
-import edu.uaic.fii.wad.edec.model.Company;
 import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.service.handler.ServiceHandler;
 import edu.uaic.fii.wad.edec.service.util.URLs;
@@ -91,7 +88,5 @@ public class SearchGroup extends AsyncTask<Void, Void, Void> {
                 System.out.println(ex.getMessage());
             }
         }
-
     }
-
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,9 @@ public class OkProductFragment extends Fragment {
 
     public void setProductInfo() {
         TextView productName = (TextView) getActivity().findViewById(R.id.ok_product_name);
+        if (MainActivity.currentProduct.getName().length() > 15) {
+            productName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        }
         productName.setText(MainActivity.currentProduct.getName());
 
         byte[] decodedString = Base64.decode(MainActivity.currentProduct.getImage(), Base64.DEFAULT);

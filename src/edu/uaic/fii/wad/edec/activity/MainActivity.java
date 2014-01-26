@@ -13,14 +13,14 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import edu.uaic.fii.wad.edec.R;
+import edu.uaic.fii.wad.edec.adapter.TabsPagerAdapter;
+import edu.uaic.fii.wad.edec.fragment.*;
 import edu.uaic.fii.wad.edec.model.Group;
 import edu.uaic.fii.wad.edec.model.Product;
 import edu.uaic.fii.wad.edec.service.group.FriendsGroupsListing;
 import edu.uaic.fii.wad.edec.service.group.JoinedGroupsListing;
 import edu.uaic.fii.wad.edec.service.group.MyGroupsListing;
 import edu.uaic.fii.wad.edec.service.group.RecommendedGroupsListing;
-import edu.uaic.fii.wad.edec.adapter.TabsPagerAdapter;
-import edu.uaic.fii.wad.edec.fragment.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

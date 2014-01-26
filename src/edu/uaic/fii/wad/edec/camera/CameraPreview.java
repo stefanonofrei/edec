@@ -1,13 +1,13 @@
 package edu.uaic.fii.wad.edec.camera;
 
-import java.io.IOException;
-import android.view.SurfaceView;
-import android.view.SurfaceHolder;
 import android.content.Context;
 import android.hardware.Camera;
-import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PreviewCallback;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+
+import java.io.IOException;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;

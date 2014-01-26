@@ -115,7 +115,7 @@ public class GroupDetails extends AsyncTask<Void, Void, Void> {
             } else if (parent == 2) {
                 StatisticsFragment.pageListener.onSwitchToNextFragment(2, 0);
             }
-            MainActivity.loading.dismiss();
+            //MainActivity.loading.dismiss();
             MainActivity.tasksNumber = -1;
             MainActivity.completedTasks.set(0);
         }

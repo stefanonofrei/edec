@@ -8,12 +8,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.service.util.Token;
@@ -83,7 +81,7 @@ public class SignInActivity extends Activity implements View.OnClickListener, Go
 
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
         progressDialog.show();
 
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {

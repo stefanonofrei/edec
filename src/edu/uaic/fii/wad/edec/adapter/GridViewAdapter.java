@@ -1,6 +1,5 @@
 package edu.uaic.fii.wad.edec.adapter;
 
-import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import edu.uaic.fii.wad.edec.R;
 import edu.uaic.fii.wad.edec.model.GridItem;
+
+import java.util.ArrayList;
 
 public class GridViewAdapter extends ArrayAdapter {
     private Context context;

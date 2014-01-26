@@ -27,7 +27,7 @@
     <string name="product_logo">Product Logo</string>
     <string name="product_logo_background">Product Logo Background</string>
     <string name="product_reasons">What\'s wrong</string>
-    <string name="recommended_products">Recommended</string>
+    <string name="recommended_products">Similar</string>
     <string name="left_arrow">Left Arrow</string>
     <string name="right_arrow">Right Arrow</string>
     <string name="group_image">Group Image</string>
@@ -49,15 +49,6 @@
         <item>Company</item>
         <item>Product</item>
         <item>Ingredient</item>
-    </string-array>
-
-    <string-array name="trending_groups">
-        <item>@drawable/mockup_drinks2</item>
-        <item>@drawable/mockup_mushrooms2</item>
-        <item>@drawable/mockup_sugar</item>
-        <item>@drawable/mockup_sweets</item>
-        <item>@drawable/mockup_companies</item>
-        <item>@drawable/mockup_drinks</item>
     </string-array>
 
     <string-array name="reason_items">

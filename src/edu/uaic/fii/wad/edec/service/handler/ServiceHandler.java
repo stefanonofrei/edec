@@ -1,10 +1,5 @@
 package edu.uaic.fii.wad.edec.service.handler;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import android.os.AsyncTask;
 import android.util.Log;
 import edu.uaic.fii.wad.edec.service.util.Token;
 import org.apache.http.HttpEntity;
@@ -22,6 +17,10 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public class ServiceHandler {
 
@@ -108,8 +107,7 @@ public class ServiceHandler {
             System.out.println(ex.getMessage());
         }
 
-        //if (url.equals("http://edec.herokuapp.com/groups/created.json"))
-            Log.d(url, response);
+        Log.d(url, response);
         return response;
     }
 }
